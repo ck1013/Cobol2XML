@@ -1,8 +1,38 @@
+/**
+ * Represents a calculator for linear equations.
+ */
 public class LinearCalculator {
+    
     // instance variables
-    private double xFrom, xTo, yFrom, yTo;
+    /**
+     * The starting x-value of the linear equation.
+     */
+    private double xFrom;
+
+    /**
+     * The ending x-value of the linear equation.
+     */
+    private double xTo;
+
+    /**
+     * The starting y-value of the linear equation.
+     */
+    private double yFrom;
+
+    /**
+     * The ending y-value of the linear equation.
+     */
+    private double yTo;
 
     // constructor
+    /**
+     * Constructs a new LinearCalculator object with the given x and y values.
+     *
+     * @param xFrom The starting x-value of the linear equation.
+     * @param xTo   The ending x-value of the linear equation.
+     * @param yFrom The starting y-value of the linear equation.
+     * @param yTo   The ending y-value of the linear equation.
+     */
     public LinearCalculator(double xFrom, double xTo, double yFrom, double yTo) {
         this.xFrom = xFrom;
         this.xTo = xTo;
@@ -11,21 +41,18 @@ public class LinearCalculator {
     }
 
     // method to calculate x for a given y
+    /**
+     * Calculates the x-value for a given y-value of the linear equation.
+     *
+     * @param y The y-value for which to calculate the corresponding x-value.
+     * @return The x-value that corresponds to the given y-value.
+     */
     public double calculateXforGivenY(double y) {
         return (y - yFrom) * (xTo - xFrom) / (yTo - yFrom) + xFrom;
     }
 
     // method to calculate y for a given x
-    public double calculateYforGivenX(double x) {
-        return (x - xFrom) * (yTo - yFrom) / (xTo - xFrom) + yFrom;
-    }
-
-    // main method
-    public static void main(String[] args) {
-        LinearCalculator lc = new LinearCalculator(0, 10, 0, 10);
-        System.out.println("Calculator for linear equation y = (x - xFrom) * (yTo - yFrom) / (xTo - xFrom) + yFrom");
-        System.out.println("xFrom = " + lc.xFrom + ", xTo = " + lc.xTo + ", yFrom = " + lc.yFrom + ", yTo = " + lc.yTo);
-        System.out.println("calculateYforGivenX(5) = " + lc.calculateYforGivenX(5));
-        System.out.println("calculateXforGivenY(5) = " + lc.calculateXforGivenY(5));
-    }
-}
+    /**
+     * Calculates the y-value for a given x-value of the linear equation.
+     *
+     * @param x The x-value for which to calculate the corresponding y-
