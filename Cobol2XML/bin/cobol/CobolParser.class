@@ -7,13 +7,26 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import parse.Terminal;
 
+/**
+ * A parser for COBOL programs.
+ */
 public class CobolParser extends Parser {
 
+    /**
+     * Constructs a new CobolParser instance.
+     *
+     * @param discard          The terminal to discard.
+     * @param fullstop         The fullstop parser.
+     * @param program_id       The program ID parser.
+     * @param division         The division parser.
+     * @param section          The section parser.
+     * @param date_written     The date written parser.
+     */
     public CobolParser(Terminal discard, CollectionParser<Parser> fullstop,
                        Alternation program_id, Alternation division,
                        cobol.SectionNameAssembler section,
                        cobol.DateAssembler date_written) {
-        super(discard);
+        super(discard); // Call the superclass constructor
         this.fullstop = fullstop;
         this.program_id = program_id;
         this.division = division;
@@ -21,12 +34,15 @@ public class CobolParser extends Parser {
         this.date_written = date_written;
     }
 
-    private CollectionParser<Parser> fullstop;
-    private Alternation program_id;
-    private Alternation division;
-    private cobol.SectionNameAssembler section;
-    private cobol.DateAssembler date_written;
+    private CollectionParser<Parser> fullstop; // The fullstop parser
+    private Alternation program_id; // The program ID parser
+    private Alternation division; // The division parser
+    private cobol.SectionNameAssembler section; // The section parser
+    private cobol.DateAssembler date_written; // The date written parser
 
+    /**
+     * Parses the COBOL program.
+     */
     @Override
     public void parse() {
         // Parse the program ID
@@ -58,26 +74,57 @@ public class CobolParser extends Parser {
         }
     }
 
+    /**
+     * Returns the program ID.
+     *
+     * @return The program ID.
+     */
     @Override
     public String getProgramID() {
         return program_id.getProgramID();
     }
 
+    /**
+     * Returns the division name.
+     *
+     * @return The division name.
+     */
     @Override
     public String getDivisionName() {
         return division.getDivisionName();
     }
 
+    /**
+     * Returns the section name.
+     *
+     * @return The section name.
+     */
     @Override
     public String getSectionName() {
         return section.getSectionName();
     }
 
+    /**
+     * Returns the date written.
+     *
+     * @return The date written.
+     */
     @Override
     public String getDateWritten() {
         return date_written.getDateWritten();
     }
 
+    /**
+     * Creates a new CobolParser instance.
+     *
+     * @param discard          The terminal to discard.
+     * @param fullstop         The fullstop parser.
+     * @param program_id       The program ID parser.
+     * @param division         The division parser.
+     * @param section          The section parser.
+     * @param date_written     The date written parser.
+     * @return A new CobolParser instance.
+     */
     public static CobolParser create(Terminal discard,
                                     CollectionParser<Parser> fullstop,
                                     cobol.Program_idAssembler program_id,
