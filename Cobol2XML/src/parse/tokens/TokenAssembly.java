@@ -2,14 +2,21 @@ package parse.tokens;
 
 import parse.Assembly;
 
+/**
+ * Represents a TokenAssembly that consumes tokens from a TokenString.
+ * This class is used to consume and manage a sequence of tokens.
+ */
 public class TokenAssembly extends Assembly {
 
+    /**
+     * The TokenString being consumed by this TokenAssembly.
+     */
     private TokenString tokenString;
 
     /**
-     * Constructs a TokenAssembly on a TokenString constructed from the given String.
+     * Constructs a TokenAssembly that consumes a TokenString constructed from the given String.
      *
-     * @param s the string to consume
+     * @param s          the string to consume
      * @return a TokenAssembly that will consume a tokenized version of the supplied String
      * @throws NullPointerException if the tokenString is null
      */
@@ -18,9 +25,9 @@ public class TokenAssembly extends Assembly {
     }
 
     /**
-     * Constructs a TokenAssembly on a TokenString constructed from the given Tokenizer.
+     * Constructs a TokenAssembly that consumes a TokenString constructed from the given Tokenizer.
      *
-     * @param t the tokenizer to consume tokens from
+     * @param t          the tokenizer to consume tokens from
      * @return a TokenAssembly that will consume a tokenized version of the supplied Tokenizer
      */
     public TokenAssembly(Tokenizer t) {
@@ -43,7 +50,7 @@ public class TokenAssembly extends Assembly {
     /**
      * Returns a textual representation of the amount of this tokenAssembly that has been consumed.
      *
-     * @param delimiter the mark to show between consumed elements
+     * @param delimiter  the mark to show between consumed elements
      * @return a textual description of the amount of this assembly that has been consumed
      */
     public String consumed(String delimiter) {
@@ -110,7 +117,7 @@ public class TokenAssembly extends Assembly {
     /**
      * Returns a textual representation of the amount of this tokenAssembly that remains to be consumed.
      *
-     * @param delimiter the mark to show between consumed elements
+     * @param delimiter  the mark to show between consumed elements
      * @return a textual description of the amount of this assembly that remains to be consumed
      */
     public String remainder(String delimiter) {
