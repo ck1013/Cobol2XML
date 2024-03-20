@@ -18,62 +18,38 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
  */
- 
+
 package utensil;
 
 import java.io.*;
 
 public class FileString {
 
-/**
- * Returns a string that represents the contents of a file.
- *
- * @param    fileName    the name of the file to read
- *
- * @return   string    the contents of a file as a String
- *
- * @exception   IOException   if the file is not found, or if there is
- *                            any problem reading the file
- */
-public static String stringFromFileNamed(String fileName) 
-	throws java.io.IOException {
-		
-	final int BUFLEN = 1024;
-	char buf[] = new char[BUFLEN];
-	
-	FileReader in = null;
-	StringWriter out = null;
-	
-	try {
-		in = new FileReader(fileName);
-		try {
-			out = new StringWriter();
-			while (true) {
-				int len = in.read(buf, 0, BUFLEN);
-				if (len == -1) {
-					break;
-				}	
-				out.write(buf, 0, len);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if(out != null) {
-	    		out.close(); 
-			}
-		}
-	} catch (Exception e) {
-		e.printStackTrace();
-    } finally { 	
-    	if(in != null) {
-    		in.close(); 
-		}
-	}	
-	if (out != null) {
-		return out.toString(); 
-		}
-	else {
-		return null;
-		}
-	}
+    /**
+     * Returns a string that represents the contents of a file.
+     *
+     * @param fileName the name of the file to read
+     * @return the contents of a file as a String
+     * @exception IOException if the file is not found, or if there is
+     * any problem reading the file
+     */
+    public static String stringFromFileNamed(String fileName) throws IOException {
+        final int BUFLEN = 1024;
+        char buf[] = new char[BUFLEN];
+
+        try (FileReader in = new FileReader(fileName);
+             StringWriter out = new StringWriter()) {
+
+            int len;
+            while ((len = in.read(buf, 0, BUFLEN)) != -1) {
+                out.write(buf, 0, len);
+            }
+            return out.toString();
+        } catch (IOException e) {
+            throw e;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IOException(e);
+        }
+    }
 }
