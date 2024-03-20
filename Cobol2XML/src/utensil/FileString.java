@@ -23,33 +23,43 @@ package utensil;
 
 import java.io.*;
 
+/**
+ * The FileString class provides a method for reading the contents of a file
+ * and returning it as a single String object.
+ */
 public class FileString {
 
     /**
-     * Returns a string that represents the contents of a file.
+     * The BUFLEN constant defines the buffer length used for reading the
+     * file.
+     */
+    private static final int BUFLEN = 1024;
+
+    /**
+     * The stringFromFileNamed method reads the contents of a file and
+     * returns it as a single String object.
      *
      * @param fileName the name of the file to read
      * @return the contents of a file as a String
-     * @exception IOException if the file is not found, or if there is
-     * any problem reading the file
+     * @throws IOException if the file is not found, or if there is any
+     * problem reading the file
      */
     public static String stringFromFileNamed(String fileName) throws IOException {
-        final int BUFLEN = 1024;
-        char buf[] = new char[BUFLEN];
+        char buf[] = new char[BUFLEN]; // create character buffer
 
         try (FileReader in = new FileReader(fileName);
              StringWriter out = new StringWriter()) {
 
             int len;
             while ((len = in.read(buf, 0, BUFLEN)) != -1) {
-                out.write(buf, 0, len);
+                out.write(buf, 0, len); // write data to StringWriter
             }
-            return out.toString();
+            return out.toString(); // return resulting String
         } catch (IOException e) {
-            throw e;
+            throw e; // rethrow IOException
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new IOException(e);
+            e.printStackTrace(); // print stack trace for other exceptions
+            throw new IOException(e); // wrap other exceptions in IOException
         }
     }
 }
