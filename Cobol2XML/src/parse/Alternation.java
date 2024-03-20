@@ -3,55 +3,92 @@ package com.example.parse;
 import java.util.*;
 
 /**
- * @(#)Alternation.java	 1.0.0
+ * Alternation is a CollectionParser that matches an input Assembly list if any of its sub-parsers can match it.
+ * It extends CollectionParser<Assembly> and implements the Parser interface.
  *
- * Copyright (c) 1999 Steven J. Metsker
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * @param <Assembly> The type of the elements in the Assembly list.
  */
+public class Alternation<Assembly> extends CollectionParser<Assembly> {
 
-public class Alternation extends CollectionParser<Assembly> {
-
+    /**
+     * Constructs an Alternation object with no name or sub-parsers.
+     */
     public Alternation() {
     }
 
+    /**
+     * Constructs an Alternation object with the given name and no sub-parsers.
+     *
+     * @param name The name of the Alternation object.
+     */
     public Alternation(String name) {
         super(name);
     }
 
+    /**
+     * Constructs an Alternation object with the given Parser as its only sub-parser.
+     *
+     * @param p The Parser object to be added as a sub-parser.
+     */
     public Alternation(Parser p) {
         super(p);
     }
 
+    /**
+     * Constructs an Alternation object with the given Parsers as its sub-parsers.
+     *
+     * @param p1 The first Parser object to be added as a sub-parser.
+     * @param p2 The second Parser object to be added as a sub-parser.
+     * @throws NullPointerException If either p1 or p2 is null.
+     */
     public Alternation(Parser p1, Parser p2) throws NullPointerException {
         super(p1, p2);
     }
 
+    /**
+     * Constructs an Alternation object with the given Parsers as its sub-parsers.
+     *
+     * @param p1 The first Parser object to be added as a sub-parser.
+     * @param p2 The second Parser object to be added as a sub-parser.
+     * @param p3 The third Parser object to be added as a sub-parser.
+     * @throws NullPointerException If any of p1, p2, or p3 is null.
+     */
     public Alternation(Parser p1, Parser p2, Parser p3) throws NullPointerException {
         super(p1, p2, p3);
     }
 
+    /**
+     * Constructs an Alternation object with the given Parsers as its sub-parsers.
+     *
+     * @param p1 The first Parser object to be added as a sub-parser.
+     * @param p2 The second Parser object to be added as a sub-parser.
+     * @param p3 The third Parser object to be added as a sub-parser.
+     * @param p4 The fourth Parser object to be added as a sub-parser.
+     * @throws NullPointerException If any of p1, p2, p3, or p4 is null.
+     */
     public Alternation(Parser p1, Parser p2, Parser p3, Parser p4) throws NullPointerException {
         super(p1, p2, p3, p4);
     }
 
+    /**
+     * Accepts a ParserVisitor object and an ArrayList of Assembly objects.
+     * Calls the visitAlternation method of the ParserVisitor object with this and visited as arguments.
+     *
+     * @param pv   The ParserVisitor object to be accepted.
+     * @param visited An ArrayList of Assembly objects to be visited.
+     */
     @Override
     public void accept(ParserVisitor pv, ArrayList<Assembly> visited) {
         pv.visitAlternation(this, visited);
     }
 
+    /**
+     * Matches an input Assembly list with this Alternation object's sub-parsers.
+     * Returns an ArrayList of Assembly objects that match any of the sub-parsers.
+     *
+     * @param in An ArrayList of Assembly objects to be matched.
+     * @return An ArrayList of Assembly objects that match any of the sub-parsers.
+     */
     @Override
     public ArrayList<Assembly> match(ArrayList<Assembly> in) {
         ArrayList<Assembly> out = new ArrayList<Assembly>();
@@ -65,6 +102,15 @@ public class Alternation extends CollectionParser<Assembly> {
         return out;
     }
 
+    /**
+     * Generates a random expansion of this Alternation object.
+     * If the depth is greater than or equal to the maximum depth, it returns a random settlement.
+     * Otherwise, it selects a random sub-parser and generates a random expansion of it with an increased depth.
+     *
+     * @param maxDepth The maximum depth of the random expansion.
+     * @param depth    The current depth of the random expansion.
+     * @return An ArrayList of Assembly objects representing the random expansion.
+     */
     @Override
     protected ArrayList<?> randomExpansion(int maxDepth, int depth) {
         if (depth >= maxDepth) {
@@ -72,36 +118,4 @@ public class Alternation extends CollectionParser<Assembly> {
         }
 
         double n = (double) subparsers.size();
-        int i = (int) (n * Math.random());
-        Parser j = (Parser) subparsers.get(i);
-        return j.randomExpansion(maxDepth, depth++);
-    }
-
-    @Override
-    protected ArrayList<?> randomSettle(int maxDepth, int depth) {
-        ArrayList<Parser> terms = new ArrayList<Parser>();
-        Enumeration<Parser> e = Collections.enumeration(subparsers);
-
-        while (e.hasMoreElements()) {
-            Parser j = e.nextElement();
-            if (j instanceof Terminal) {
-                terms.add(j);
-            }
-        }
-
-        ArrayList<Parser> which = terms;
-        if (terms.isEmpty()) {
-            which = subparsers;
-        }
-
-        double n = (double) which.size();
-        int i = (int) (n * Math.random());
-        Parser p = which.get(i);
-        return p.randomExpansion(maxDepth, depth++);
-    }
-
-    @Override
-    protected String toStringSeparator() {
-        return "|";
-    }
-}
+        int i =
