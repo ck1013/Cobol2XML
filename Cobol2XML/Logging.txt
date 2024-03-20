@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cobol>
   <identification>
-    <program-id>base</program-id>
-    <day-date-written>7</day-date-written>
-    <month-date-written>mar</month-date-written>
-    <year-date-written>1995</year-date-written>
+    <program-id>base</program-id>! The name of this COBOL program is "base".
+    <day-date-written>7</day-date-written>! The day this program was written is the 7th.
+    <month-date-written>mar</month-date-written>! The month this program was written is March.
+    <year-date-written>1995</year-date-written>! The year this program was written is 1995.
   </identification>
   <data>
-    <working-storage />
+    <working-storage />! This section defines the variables used in the program.
   </data>
-  <procedure />
+  <procedure />! This section contains the main logic of the program.
 </cobol>
+
