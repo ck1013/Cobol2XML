@@ -4,14 +4,23 @@ import java.util.Enumeration;
 import java.util.List;
 
 public class CollectionParser {
+    // A list of Parser objects that this CollectionParser will parse
     private List<Parser> subParsers;
+    // A StringBuffer used to build the string representation of the parsed objects
     private StringBuffer buf;
+    // A flag to keep track of whether the object has been visited or not
     private boolean visited;
 
+    /**
+     * Constructor for CollectionParser
+     *
+     * @param name     The name of the collection parser
+     * @param parsers  An array of Parser objects to be parsed by this CollectionParser
+     */
     public CollectionParser(String name, Parser... parsers) {
         this.subParsers = new ArrayList<>();
         this.buf = new StringBuffer();
-        this:
+        // Iterate through the parsers array and add non-null Parser objects to the subParsers list
         for (Parser parser : parsers) {
             if (parser == null) {
                 continue;
@@ -20,34 +29,30 @@ public class CollectionParser {
         }
     }
 
+    /**
+     * Getter method for the subParsers list
+     *
+     * @return The subParsers list
+     */
     public List<Parser> getSubParsers() {
         return this.subParsers;
     }
 
+    /**
+     * Overrides the toString() method to return a string representation of the parsed objects
+     *
+     * @return A string representation of the parsed objects
+     */
     @Override
     public String toString() {
         if (this.subParsers.isEmpty()) {
             return "";
         }
-        this.buf.setLength(0);
-        this.visited = false;
-        Enumeration<Parser> e = Collections.enumeration(this.subParsers);
-        while (e.hasMoreElements()) {
-            Parser parser = e.nextElement();
+        this.buf.setLength(0); // Reset the StringBuffer to its initial state
+        this.visited = false; // Reset the visited flag to false
+        Enumeration<Parser> e = Collections.enumeration(this.subParsers); // Get an enumeration of the subParsers list
+        while (e.hasMoreElements()) { // Iterate through the enumeration
+            Parser parser = e.nextElement(); // Get the next Parser object in the enumeration
             if (this.visited) {
-                this.buf.append(toStringSeparator());
-            }
-            this.buf.append(parser.toString());
-            this.visited = true;
-        }
-        return this.buf.toString();
-    }
-
-    protected String toStringSeparator() {
-        return ", ";
-    }
-
-    protected boolean needSeparator(Enumeration<Parser> e) {
-        return e.hasMoreElements();
-    }
-}
+                this.buf.append(toStringSeparator()); // If the object has been visited, append the separator string
+           
