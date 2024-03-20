@@ -3,43 +3,25 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Symbol {
+    // The name of the symbol
     private String name;
+    
+    // A list of signatures associated with the symbol
     private List<String> signatures;
 
+    // Constructor for the Symbol class
+    // Initializes a new Symbol object with the given name
     public Symbol(String name) {
         this.name = name;
         this.signatures = new ArrayList<>();
     }
 
+    // Adds a new signature to the list of signatures
     public void addSignature(String signature) {
         this.signatures.add(signature);
     }
 
+    // Returns the name of the symbol
     public String getName() {
         return name;
-    }
 
-    public List<String> getSignatures() {
-        return signatures;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof Symbol)) {
-            return false;
-        }
-        Symbol other = (Symbol) obj;
-        return this.name.equals(other.name) && this.signatures.equals(other.signatures);
-    }
-
-    @Override
-    public String toString() {
-        return "Symbol{" +
-                "name='" + name + '\'' +
-                ", signatures=" + signatures +
-                '}';
-    }
-
-    public static void main(String[] args) {
-        Symbol symbol = new Symbol("foo");
-        symbol.addSignature("(Ljava/util/
