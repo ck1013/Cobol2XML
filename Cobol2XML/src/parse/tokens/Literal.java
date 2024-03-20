@@ -18,51 +18,53 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
  */
- 
+
 package parse.tokens;
 
-import java.util.*;
-import parse.*;
+import java.util.ArrayList;
+import parse.Parser;
+import parse.Token;
 
 public class Literal extends Terminal {
-/**
- * the literal to match
- */
-	protected Token literal; 
 
-/**
- * Constructs a literal that will match the specified string.
- *
- * @param   string   the string to match as a token
- *
- * @return   a literal that will match the specified string
- */
-public Literal(String s) {
-	literal = new Token(s);
-}
-/**
- * Returns true if the literal this object equals an
- * assembly's next element.
- *
- * @param   object   an element from an assembly
- *
- * @return   true, if the specified literal equals the next 
- *           token from an assembly
- */
-protected boolean qualifies(Object o) {
-	return literal.equals((Token) o);
-}
-/**
- * Returns a textual description of this parser.
- *
- * @param   vector   a list of parsers already printed in 
- *                   this description
- * 
- * @return   string   a textual description of this parser
- *
- * @see Parser#toString()
- */
-public String unvisitedString(ArrayList<Parser> visited) {
-	return literal.toString();
-}
+    /* the literal to match */
+    protected Token literal;
+
+    /**
+     * Constructs a literal that will match the specified string.
+     *
+     * @param string the string to match as a token
+     *
+     * @return a literal that will match the specified string
+     */
+    public Literal(String s) {
+        literal = new Token(s);
+    }
+
+    /**
+     * Returns true if the literal this object equals an
+     * assembly's next element.
+     *
+     * @param o an element from an assembly
+     *
+     * @return true, if the specified literal equals the next token from an assembly
+     */
+    @Override
+    protected boolean qualifies(Object o) {
+        return literal.equals((Token) o);
+    }
+
+    /**
+     * Returns a textual description of this parser.
+     *
+     * @param vector a list of parsers already printed in this description
+     *
+     * @return string a textual description of this parser
+     *
+     * @see Parser#toString
+     */
+    @Override
+    public String unvisitedString(ArrayList<Parser> visited) {
+        return literal.toString();
+    }
 }
