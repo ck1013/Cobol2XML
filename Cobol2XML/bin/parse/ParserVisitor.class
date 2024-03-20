@@ -3,8 +3,18 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A visitor for the parse.ParseTree that generates an Assembly object.
+ */
 public class ParserVisitor extends parse.ParseVisitor<Assembly> {
     
+    /**
+     * Visits an alternation context and returns an Assembly object that represents
+     * the alternation.
+     *
+     * @param ctx the alternation context to visit
+     * @return an Assembly object that represents the alternation
+     */
     @Override
     public Assembly visitAlternation(parse.AlternationContext ctx) {
         List<Assembly> assemblies = new ArrayList<>();
@@ -23,3 +33,4 @@ public class ParserVisitor extends parse.ParseVisitor<Assembly> {
     
     // add other visit methods here
 }
+
