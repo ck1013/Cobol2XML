@@ -1,17 +1,34 @@
 import java.util.Vector;
-import parse.tokens.*;
+import parse.tokens.*; // Importing custom Tokenizer and TokenType classes
 import java.io.*;
 
 public class TokenStringSource {
+    // Declare an instance variable 'tokenizer' of Tokenizer class
     private Tokenizer tokenizer;
+
+    // Declare an instance variable 'delimiter' of String class
     private String delimiter;
+
+    // Declare an instance variable 'cachedTokenString' of TokenString class
     private TokenString cachedTokenString;
 
+    /**
+     * Constructor for TokenStringSource class with two parameters:
+     * 'tokenizer' of Tokenizer class and 'delimiter' of String class
+     * @param tokenizer Object of Tokenizer class
+     * @param delimiter Delimiter string to separate tokens
+     */
     public TokenStringSource(Tokenizer tokenizer, String delimiter) {
         this.tokenizer = tokenizer;
         this.delimiter = delimiter;
     }
 
+    /**
+     * Method to ensure the cache is loaded before returning the tokens
+     * @return Vector of Token objects
+     * @throws IOException If there is an error reading from the input stream
+     * @throws InternalError If there is an internal error while tokenizing
+     */
     public Vector<Token> ensureCacheIsLoaded() throws IOException, InternalError {
         if (cachedTokenString == null || cachedTokenString.hasMoreTokenStrings()) {
             loadCache();
@@ -19,38 +36,41 @@ public class TokenStringSource {
         return cachedTokenString.tokens;
     }
 
+    /**
+     * Method to load the token string into the cache
+     * @throws IOException If there is an error reading from the input stream
+     * @throws InternalError If there is an internal error while tokenizing
+     */
     private void loadCache() throws IOException, InternalError {
         Vector<Token> tokenVector = new Vector<>();
-        String returnTokenString = tokenizer.nextTokenString();
-        while (!returnTokenString.equals(TokenType.TT_EOF)) {
-            Token token = new Token();
-            token.ttype = TokenType.getTokenType(returnTokenString);
+        String returnTokenString = tokenizer.nextTokenString(); // Read the next token string from the input
+
+        while (!returnTokenString.equals(TokenType.TT_EOF)) { // Loop until the end of the input is reached
+            Token token = new Token(); // Create a new Token object
+            token.ttype = TokenType.getTokenType(returnTokenString); // Get the token type
+
             if (token.ttype == TokenType.TT_EOL) {
-                token.sval = "\n";
+                token.sval = "\n"; // Set the token value to a newline character if it's an end-of-line token
             } else {
-                token.sval = returnTokenString;
+                token.sval = returnTokenString; // Set the token value to the token string
             }
-            tokenVector.addElement(token);
-            returnTokenString = tokenizer.nextTokenString();
+
+            tokenVector.addElement(token); // Add the token to the vector
+            returnTokenString = tokenizer.nextTokenString(); // Read the next token string from the input
         }
-        cachedTokenString = new TokenString(tokenVector, delimiter);
+
+        cachedTokenString = new TokenString(tokenVector, delimiter); // Create a new TokenString object with the vector of tokens and the delimiter
     }
 
+    /**
+     * Main method to demonstrate the usage of TokenStringSource class
+     * @param args Command line arguments
+     */
     public static void main(String[] args) {
         try {
-            String input = "I came; I saw; I left in peace";
-            String delimiter = "; ";
-            Tokenizer tokenizer = new Tokenizer(new StringReader(input));
-            TokenStringSource tokenStringSource = new TokenStringSource(tokenizer, delimiter);
-            Vector<Token> tokens = tokenStringSource.ensureCacheIsLoaded();
-            System.out.println("Tokens: ");
-            for (Token token : tokens) {
-                System.out.println(token.sval);
-            }
-        } catch (IOException e) {
-            System.out.println("Error: " + e.getMessage());
-        } catch (InternalError e) {
-            System.out.println("Problem tokenizing string: " + e.getMessage());
-        }
-    }
-}
+            String input = "I came; I saw; I left in peace"; // Input string to tokenize
+            String delimiter = "; "; // Delimiter to separate tokens
+            Tokenizer tokenizer = new Tokenizer(new StringReader(input)); // Create a new Tokenizer object with the input string
+            TokenStringSource tokenStringSource = new TokenStringSource(tokenizer, delimiter); // Create a new TokenStringSource object with the tokenizer and delimiter
+
+            Vector<Token> tokens = tokenStringSource.ensureCache
