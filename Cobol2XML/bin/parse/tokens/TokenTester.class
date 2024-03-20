@@ -1,22 +1,28 @@
-import parse.Parser;
-import parse.tokens.TokenAssembly;
-import parse.tokens.TokenTester;
+import parse.Parser; // Import the Parser class from the parse package
+import parse.tokens.TokenAssembly; // Import the TokenAssembly class from the parse.tokens package
+import parse.tokens.TokenTester; // Import the TokenTester class from the parse.tokens package
 
 public class TokenTester {
 
+    // Declare a Parser instance variable named 'parser'
     private Parser parser;
 
+    // Constructor for the TokenTester class that takes a Parser object as a parameter
     public TokenTester(Parser parser) {
-        this.parser = parser;
+        this.parser = parser; // Assign the passed-in Parser object to the 'parser' instance variable
     }
 
+    // Method that takes a source code string as a parameter and returns a TokenAssembly object
     public TokenAssembly assembly(String source) {
+        // Create a new TokenAssembly object with the 'source' string and the result of calling the 'parse' method on the 'parser' object
         return new TokenAssembly(source, parser.parse(source));
     }
 
+    // Main method that creates a TokenTester object, calls the 'assembly' method with a sample source code string, and does something with the returned TokenAssembly object
     public static void main(String[] args) {
-        TokenTester tester = new TokenTester(new SomeParser());
-        TokenAssembly assembly = tester.assembly("some source code");
-        // do something with the assembly
+        TokenTester tester = new TokenTester(new SomeParser()); // Create a new TokenTester object with a new SomeParser object
+        TokenAssembly assembly = tester.assembly("some source code"); // Call the 'assembly' method on the TokenTester object with a sample source code string
+        // do something with the assembly // TODO: Add code here to do something with the TokenAssembly object
     }
 }
+
