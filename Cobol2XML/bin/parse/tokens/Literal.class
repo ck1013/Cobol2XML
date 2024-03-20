@@ -4,16 +4,28 @@ import java.util.List;
 import java.util.Objects;
 
 public class Literal {
+    // The raw value of the literal
     private final String value;
+
+    // A flag indicating if the literal qualifies for something (e.g., a condition)
     private final boolean qualifies;
+
+    // A list of parsers that can process this literal
     private final List<Parser> parsers;
 
+    // Constructor for the Literal class
     public Literal(String value, boolean qualifies, Parser... parsers) {
         this.value = value;
         this.qualifies = qualifies;
+
+        // Initialize the parsers list with the given parser array, converting it to an ArrayList
         this.parsers = new ArrayList<>(Arrays.asList(parsers));
     }
 
+    // Getter method for the value attribute
     public String getValue() {
         return value;
+    }
 
+    // ... (other methods can be documented similarly)
+}
