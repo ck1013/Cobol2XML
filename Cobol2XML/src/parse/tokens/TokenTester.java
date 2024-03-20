@@ -23,7 +23,7 @@ package parse.tokens;
 import parse.*;
 
 /**
- * A tester class for the Token parser.
+ * A tester class for the Token parser. This class extends the ParserTester class and overrides its assembly() method to create a new TokenAssembly instance.
  */
 public class TokenTester extends ParserTester {
 
@@ -31,6 +31,8 @@ public class TokenTester extends ParserTester {
      * Constructs a new TokenTester instance with the given Parser.
      *
      * @param p the Parser to test
+     *
+     * This constructor initializes a new TokenTester instance with the given Parser object.
      */
     public TokenTester(Parser p) {
         super(p);
@@ -41,9 +43,12 @@ public class TokenTester extends ParserTester {
      *
      * @param s the string to create the TokenAssembly from
      * @return a new TokenAssembly instance
+     *
+     * This method overrides the assembly() method of the ParserTester class to create a new TokenAssembly instance instead of a DefaultAssembly instance.
      */
     @Override
     protected Assembly assembly(String s) {
         return new TokenAssembly(s);
     }
 }
+
