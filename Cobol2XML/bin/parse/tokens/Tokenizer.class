@@ -2,54 +2,63 @@ import java.io.IOException;
 import java.io.PushbackReader;
 
 public class Tokenizer {
+    // Default maximum number of symbols that can be pushed back in the reader
     private static final int DEFAULT_SYMBOL_MAX = 10;
 
+    // Enum to represent the different states of the tokenizer
     private enum TokenizerState {
-        characterState,
-        numberState,
-        quoteState,
-        slashState,
-        symbolState,
-        whitespaceState,
-        wordState
+        characterState,    // State for handling character tokens
+        numberState,       // State for handling number tokens
+        quoteState,        // State for handling quote tokens
+        slashState,       // State for handling slash tokens
+        symbolState,      // State for handling symbol tokens
+        whitespaceState,  // State for handling whitespace tokens
+        wordState         // State for handling word tokens
     }
 
+    // Enum to represent the different states of number parsing
     private enum NumberState {
-        intState,
-        pointState,
-        exponentState
+        intState,          // State for handling integer part of a number
+        pointState,        // State for handling decimal point of a number
+        exponentState     // State for handling exponential part of a number
     }
 
+    // Enum to represent the different states of quote handling
     private enum QuoteState {
-        singleQuoteState,
-        doubleQuoteState
+        singleQuoteState,  // State for handling single quote tokens
+        doubleQuoteState   // State for handling double quote tokens
     }
 
+    // Enum to represent the different states of slash handling
     private enum SlashState {
-        normalSlashState,
-        backSlashState
+        normalSlashState,  // State for handling normal slash tokens
+        backSlashState     // State for handling backslash tokens
     }
 
+    // Enum to represent the different states of symbol handling
     private enum SymbolState {
-        symbol1State,
-        symbol2State,
-        symbol3State,
-        symbol4State,
-        symbol5State
+        symbol1State,      // State for handling the first symbol
+        symbol2State,      // State for handling the second symbol
+        symbol3State,      // State for handling the third symbol
+        symbol4State,      // State for handling the fourth symbol
+        symbol5State       // State for handling the fifth symbol
     }
 
+    // Enum to represent the different states of whitespace handling
     private enum WhitespaceState {
-        spaceState,
-        tabState,
-        newlineState
+        spaceState,        // State for handling space whitespace
+        tabState,         // State for handling tab whitespace
+        newlineState       // State for handling newline whitespace
     }
 
+    // Enum to represent the different states of word handling
     private enum WordState {
-        wordStartState,
-        wordMiddleState,
-        wordEndState
+        wordStartState,    // State for handling the start of a word
+        wordMiddleState,   // State for handling the middle of a word
+        wordEndState       // State for handling the end of a word
     }
 
+    // Variables to keep track of the current state of the tokenizer
     private TokenizerState characterState;
     private NumberState numberState;
     private QuoteState quoteState;
@@ -58,22 +67,28 @@ public class Tokenizer {
     private WhitespaceState whitespaceState;
     private WordState wordState;
 
+    // Constructor for the Tokenizer class with a string argument
     public Tokenizer(String string) {
         this(new StringReader(string));
     }
 
+    // Constructor for the Tokenizer class with a reader argument
     public Tokenizer(java.io.Reader reader) {
         this(new PushbackReader(reader, DEFAULT_SYMBOL_MAX));
     }
 
+    // Constructor for the Tokenizer class with a pushback reader argument
     public Tokenizer(PushbackReader pushbackReader) {
+        // Set the reader and initialize the state variables
         this.setReader(pushbackReader);
         this.setString(pushbackReader.toString());
         this.nextToken();
     }
 
+    // Method to set the reader for the tokenizer
     public void setReader(PushbackReader reader) {
         this.reader = reader;
+        // Reset the state variables to their initial values
         this.characterState = TokenizerState.characterState;
         this.numberState = NumberState.intState;
         this.quoteState = QuoteState.singleQuoteState;
@@ -83,65 +98,26 @@ public class Tokenizer {
         this.wordState = WordState.wordStartState;
     }
 
+    // Method to get the next token from the input
     public Token nextToken() {
         int c = 0;
         try {
+            // Read the next character from the reader
             c = this.reader.read();
         } catch (IOException e) {
+            // Print the stack trace if an IOException occurs
             e.printStackTrace();
         }
 
+        // Call the private getToken method to get the token
         return getToken(c);
     }
 
+    // Private method to get the token based on the current state
     private Token getToken(int c) {
+        // Check if the character is a whitespace
         if (Character.isWhitespace(c)) {
+            // Call the private method to handle whitespace tokens
             return getWhitespaceToken(c);
-        } else if (Character.isDigit(c)) {
-            return getNumberToken(c);
-        } else if (Character.isAlphabetic(c)) {
-            return getWordToken(c);
-        } else if (c == '/') {
-            return getSlashToken(c);
-        } else if (c == '\'') {
-            return getQuoteToken(c);
-        } else if (isSymbol(c)) {
-            return getSymbolToken(c);
-        } else {
-            return new Token(Token.TokenType.EOF, "" + (char) c);
         }
-    }
-
-    private Token getWhitespaceToken(int c) {
-        if (this.whitespaceState == WhitespaceState.spaceState) {
-            if (c == ' ') {
-                this.whitespaceState = WhitespaceState.spaceState;
-                return new Token(Token.TokenType.WHITESPACE, " ");
-            } else if (c == '\t') {
-                this.whitespaceState = WhitespaceState.tabState;
-                return new Token(Token.TokenType.WHITESPACE, "\t");
-            } else if (c == '\n') {
-                this.whitespaceState = WhitespaceState.newlineState;
-                return new Token(Token.TokenType.WHITESPACE, "\n");
-            }
-        } else if (this.whitespaceState == WhitespaceState.tabState) {
-            if (c == '\t') {
-                this.whitespaceState = WhitespaceState.tabState;
-                return new Token(Token.TokenType.WHITESPACE, "\t");
-            } else if (c == '\n') {
-                this.whitespaceState = WhitespaceState.newlineState;
-                return new Token(Token.TokenType.WHITESPACE, "\n");
-            } else if (c == ' ') {
-                this.whitespaceState = WhitespaceState.spaceState;
-                return new Token(Token.TokenType.WHITESPACE, " ");
-            }
-        } else if (this.whitespaceState == WhitespaceState.newlineState) {
-            if (c == '\n') {
-                this.whitespaceState = WhitespaceState.newlineState;
-                return new Token(Token.TokenType.WHITESPACE, "\n");
-            } else if (c == ' ') {
-                this.whitespaceState = WhitespaceState.spaceState;
-                return new Token(Token.TokenType.WHITESPACE, " ");
-            } else if (c == '\t') {
-                this.whitespaceState = WhitespaceState.tabState;
-                return new Token(Token.TokenType.WHITESPACE,
+        // Check if the character is a digit
