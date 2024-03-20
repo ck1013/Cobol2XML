@@ -1,45 +1,36 @@
 package parse;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
-public abstract class Assembler {
-	/**
-	 * Returns a vector of the elements on an assembly's stack 
-	 * that appear before a specified fence.
-	 * <p>
-	 * Sometimes a parser will recognize a list from within 
-	 * a pair of parentheses or brackets. The parser can mark 
-	 * the beginning of the list with a fence, and then retrieve 
-	 * all the items that come after the fence with this method.
-	 *
-	 * @param   assembly   a assembly whose stack should contain 
-	 * some number of items above a fence marker
-	 * 
-	 * @param   object   the fence, a marker of where to stop 
-	 *                   popping the stack
-	 * 
-	 * @return   Vector   the elements above the specified fence
-	 * 
-	 */
-	public static ArrayList<Object> elementsAbove(Assembly a, Object fence) {
-		ArrayList<Object> items = new ArrayList<Object>();
-		 
-		while (!a.stackIsEmpty()) {
-			Object top = a.pop();
-			if (top.equals(fence)) {
-				break;
-			}
-			items.add(top);
-		}
-		return items;
-	}
-	/**
-	 * This is the one method all subclasses must implement. It 
-	 * specifies what to do when a parser successfully 
-	 * matches against a assembly.
-	 *
-	 * @param   Assembly   the assembly to work on
-	 */
-	public abstract void workOn(Assembly a);
-}
+/**
+ * An abstract class representing an assembler that can parse a sequence of tokens
+ * and perform some action on them.
+ *
+ * @param <T> the type of elements in the assembler's stack and the input sequence
+ */
+public abstract class Assembler<T> {
 
+    /**
+     * Returns a list of the elements on the assembler's stack that appear before a
+     * specified fence.
+     *
+     * @param <F> the type of the fence object
+     * @param a   the assembler whose stack should contain some number of items
+     *            above a fence marker
+     * @param fence the fence, a marker of where to stop popping the stack
+     * @return a list of the elements above the specified fence
+     */
+    public static <F> List<T> elementsAbove(Assembler<T> a, F fence) {
+        List<T> items = new ArrayList<>();
+        while (!a.stackIsEmpty()) {
+            T top = a.pop();
+            if (top instanceof F && top == fence) {
+                break;
+            }
+            items.add(top);
+        }
+        return items;
+    }
+
+    /**
