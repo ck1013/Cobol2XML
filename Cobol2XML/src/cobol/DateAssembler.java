@@ -1,5 +1,5 @@
 /*
- * @(#)DateAssembler.java	 0.0.1
+ * DateAssembler.java - Version 1.0
  *
  * Copyright (c) 2019 Julian M. Bass
  *
@@ -16,34 +16,34 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
  */
- 
+
 package cobol;
 
-import parse.*;
-import parse.tokens.*;
-public class DateAssembler extends Assembler {
-/**
- * Pop a string, and set the target SectionName to this
- * string.
- *
- * @param   Assembly   the assembly to work on
- */
-public void workOn(Assembly a) {
-	Cobol c = new Cobol();
-	Token t = (Token) a.pop();
-	String tokenString = t.sval().trim();
-	
-	// deconstrct toak string into month and year components
-	String monthString = "" + tokenString.charAt(0) + tokenString.charAt(1) + tokenString.charAt(2);
-	c.setMonthDateWritten(monthString);
-	
-	String yearString = "" + tokenString.charAt(4) + tokenString.charAt(5) + tokenString.charAt(6) + tokenString.charAt(7);
-	c.setYearDateWritten(Integer.parseInt(yearString));
-	
-	t = (Token) a.pop();
-	c.setDayDateWritten( (int) t.nval() );
-	a.setTarget(c);
-}
+import parse.Assembly;
+import parse.Parser;
+import parse.tokens.Token;
+
+public class DateAssembler extends Parser {
+
+    // Set the target SectionName to the popped string
+    public void workOn(Assembly a) {
+        Cobol c = new Cobol();
+        Token t = (Token) a.pop();
+        String tokenString = t.sval().trim();
+
+        // Deconstruct token string into month, day, and year components
+        String monthString = tokenString.substring(0, 3);
+        c.setMonthDateWritten(monthString);
+
+        String dayString = tokenString.substring(3, 5);
+        int day = Integer.parseInt(dayString);
+        c.setDayDateWritten(day);
+
+        String yearString = tokenString.substring(5, 9);
+        int year = Integer.parseInt(yearString);
+        c.setYearDateWritten(year);
+
+        a.setTarget(c);
+    }
 }
