@@ -18,38 +18,43 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
  */
- 
+
 package parse.tokens;
 
 import java.io.*;
-public class SlashState extends TokenizerState {
-	
-	protected SlashStarState slashStarState = 
-		new SlashStarState();
-		
-	protected SlashSlashState slashSlashState = 
-		new SlashSlashState();
+
 /**
- * Either delegate to a comment-handling state, or return a 
- * token with just a slash in it.
- *
- * @return   either just a slash token, or the results of 
- *           delegating to a comment-handling state
+ * This class represents the SlashState in a tokenizer, which handles the '/' character.
+ * It can delegate to a comment-handling state or return a token with just a slash in it.
  */
-public Token nextToken(
-	PushbackReader r, int theSlash, Tokenizer t)
-	throws IOException {
-		
-	int c = r.read();
-	if (c == '*') {
-		return slashStarState.nextToken(r, '*', t);
-	}
-	if (c == '/') {
-		return slashSlashState.nextToken(r, '/', t);
-	}
-	if (c >= 0) {
-		r.unread(c);
-	}
-	return new Token(Token.TT_SYMBOL, "/", 0);
-}
+public class SlashState extends TokenizerState {
+
+    /** The SlashStarState instance for handling '/*' comments. */
+    protected SlashStarState slashStarState = new SlashStarState();
+
+    /** The SlashSlashState instance for handling '//' comments. */
+    protected SlashSlashState slashSlashState = new SlashSlashState();
+
+    /**
+     * Either delegate to a comment-handling state, or return a token with just a slash in it.
+     *
+     * @param  r             the PushbackReader to read characters from
+     * @param  theSlash      the slash character ('/' in ASCII)
+     * @param  t             the Tokenizer instance
+     * @return              either just a slash token, or the results of delegating to a comment-handling state
+     * @throws IOException  if an I/O error occurs
+     */
+    public Token nextToken(PushbackReader r, int theSlash, Tokenizer t) throws IOException {
+        int c = r.read();
+        if (c == '*') {
+            return slashStarState.nextToken(r, '*', t);
+        }
+        if (c == '/') {
+            return slashSlashState.nextToken(r, '/', t);
+        }
+        if (c >= 0) {
+            r.unread(c);
+        }
+        return new Token(Token.TT_SYMBOL, "/", 0);
+    }
 }
