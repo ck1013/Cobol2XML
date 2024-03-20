@@ -7,6 +7,9 @@ import parse.Parser;
 
 /**
  * A Word is a terminal that matches a sequence of characters.
+ * This class represents a Word in the context of a parser.
+ * It extends the Terminal class and overrides the 'qualifies' method
+ * to check if a given token is a Word.
  *
  * @author Steven J. Metsker
  * @version 1.0.0
@@ -17,6 +20,8 @@ public class Word extends Terminal {
 
     /**
      * Returns true if an assembly's next element is a word.
+     * This method checks if the given object 'o' is a Word by calling
+     * the 'isWord' method on the Token 't'.
      *
      * @param o an element from an assembly
      * @return true, if an assembly's next element is a word
@@ -29,6 +34,8 @@ public class Word extends Terminal {
 
     /**
      * Create a set with one random word (with 3 to 7 characters).
+     * This method generates a random word with a length between 3 and 7
+     * characters and returns it as an ArrayList.
      *
      * @param maxDepth maximum depth of the parse tree
      * @param depth    current depth of the parse tree
@@ -39,10 +46,10 @@ public class Word extends Terminal {
             return new ArrayList<>();
         }
 
-        int n = new Random().nextInt(5) + 3;
+        int n = new Random().nextInt(5) + 3; // generate random number between 3 and 7
         char[] letters = new char[n];
         for (int i = 0; i < n; i++) {
-            int c = new Random().nextInt(26) + 'a';
+            int c = new Random().nextInt(26) + 'a'; // generate random lowercase letter
             letters[i] = (char) c;
         }
 
@@ -53,6 +60,8 @@ public class Word extends Terminal {
 
     /**
      * Returns a textual description of this parser.
+     * This method returns a string representation of the Word parser.
+     * If the Word parser has already been printed, it returns an empty string.
      *
      * @param visited a list of parsers already printed in this description
      * @return string a textual description of this parser
@@ -67,3 +76,4 @@ public class Word extends Terminal {
         return "Word";
     }
 }
+
