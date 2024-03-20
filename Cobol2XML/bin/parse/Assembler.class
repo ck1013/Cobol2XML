@@ -1,6 +1,15 @@
 import java.util.ArrayList;
 
 public class Assembler {
+    /**
+     * Returns a list of all elements above the given object in the assembly stack,
+     * in the order they were added. If the stack is empty or the given object is not in the stack,
+     * an empty list is returned.
+     *
+     * @param assembly the Assembly object to examine
+     * @param obj the Object to find in the assembly stack
+     * @return an ArrayList of Objects representing the elements above the given object
+     */
     public ArrayList<Object> elementsAbove(Assembly assembly, Object obj) {
         ArrayList<Object> result = new ArrayList<Object>();
         if (this.stackIsEmpty()) {
@@ -18,33 +27,46 @@ public class Assembler {
         return result;
     }
 
+    /**
+     * Performs work on the given assembly. The specifics of this method are not provided.
+     *
+     * @param assembly the Assembly object to work on
+     */
     public void workOn(Assembly assembly) {
         // Implementation not provided
     }
 
+    /**
+     * Checks if the assembly stack is empty.
+     *
+     * @return true if the stack is empty, false otherwise
+     */
     private boolean stackIsEmpty() {
         // Implementation not provided
         return false;
     }
 
+    /**
+     * Returns the top object in the assembly stack.
+     *
+     * @return the top Object in the stack
+     */
     private Object top() {
         // Implementation not provided
         return null;
     }
 
+    /**
+     * Removes the top object from the assembly stack.
+     */
     private void pop() {
         // Implementation not provided
     }
 }
 
 class Assembly {
-    public Object pop() {
-        // Implementation not provided
-        return null;
-    }
+    /**
+     * Removes and returns the top object from the assembly stack.
+     *
+     * @return the top Object in the stack
 
-    public Object top() {
-        // Implementation not provided
-        return null;
-    }
-}
