@@ -5,18 +5,34 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 
+/**
+ * Sequence class extends Parser and represents a sequence of parsers. It overrides the matchAndAssemble method to match and assemble the sequence of parsers.
+ */
 public class Sequence extends Parser {
     private static final long serialVersionUID = 1L;
     private static final Logger LOGGER = Logger.getLogger(Sequence.class.getName());
+    
+    // A list of subparsers
     private List<Parser> subparsers;
+    
+    // Name of the sequence
     private String name;
 
+    /**
+     * Constructor for Sequence class with name parameter
+     * @param name Name of the sequence
+     */
     public Sequence(String name) {
         super(name);
         this.subparsers = new ArrayList<>();
         this.name = name;
     }
 
+    /**
+     * Constructor for Sequence class with name and parsers parameters
+     * @param name Name of the sequence
+     * @param parsers Parsers to be added to the sequence
+     */
     public Sequence(String name, Parser... parsers) {
         this(name);
         for (Parser parser : parsers) {
@@ -24,8 +40,29 @@ public class Sequence extends Parser {
         }
     }
 
+    /**
+     * Adds a parser to the sequence
+     * @param parser Parser to be added
+     */
     public void addParser(Parser parser) {
-        this.subparsers.add(parser);
+        this.subparsers = addToListInOrder(this.subparsers, parser);
+    }
+
+    /**
+     * Helper method to add an element to a list in order
+     * @param list List to which the element is to be added
+     * @param element Element to be added
+     * @param <E> Type of the list and the element
+     * @return The updated list
+     */
+    private <E extends Parser> List<E> addToListInOrder(List<E> list, E element) {
+        int index = Collections.binarySearch(list, element);
+        if (index < 0) {
+            index = ~index;
+        }
+        list = new ArrayList<>(list);
+        list.add(index, element);
+        return list;
     }
 
     @Override
@@ -46,19 +83,3 @@ public class Sequence extends Parser {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("Sequence(");
-        builder.append(name);
-        builder.append("): ");
-        boolean first = true;
-        for (Parser parser : subparsers) {
-            if (first) {
-                first = false;
-            } else {
-                builder.append(", ");
-            }
-            builder.append(parser.toString());
-        }
-        builder.append(")");
-        return builder.toString();
-    }
-}
