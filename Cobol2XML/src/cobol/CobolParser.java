@@ -29,8 +29,16 @@ import parse.tokens.Symbol;
 import parse.tokens.Tokenizer;
 import parse.tokens.Word;
 
+/**
+ * CobolParser is a class that provides a parser for COBOL source code.
+ * It creates a COBOL object as an assembly's target and recognizes
+ * the selected COBOL source code constructs.
+ */
 public class CobolParser {
     
+    /**
+     * Default constructor for CobolParser.
+     */
     public CobolParser() {
         // constructor
     }
@@ -46,13 +54,13 @@ public class CobolParser {
         Alternation a = new Alternation();
         
         Symbol fullstop = new Symbol('.');
-        fullstop.discard();
+        fullstop.discard(); // discards the full stop symbol
         
         a.add(ProgramID());
         a.add(DivisionName());
         a.add(SectionName());
         a.add(DateWritten());
-        a.add(new Empty());
+        a.add(new Empty()); // matches an empty sequence
         
         return a;
     }
@@ -66,7 +74,7 @@ public class CobolParser {
     protected Parser ProgramID() {
         Sequence s = new Sequence();
         s.add(new CaselessLiteral("program-id"));
-        s.add(new Symbol('.').discard());
+        s.add(fullstop); // discards the full stop symbol
         s.add(new Word().setAssembler(new Program_idAssembler()));
         return s;
     }
@@ -81,7 +89,7 @@ public class CobolParser {
         Sequence s = new Sequence();
         s.add(new Word().setAssembler(new DivisionAssembler()));
         s.add(new CaselessLiteral("division"));
-        s.add(new Symbol('.').discard());
+        s.add(fullstop); // discards the full stop symbol
         return s;
     }
     
@@ -95,7 +103,7 @@ public class CobolParser {
         Sequence s = new Sequence();
         s.add(new Word().setAssembler(new SectionNameAssembler()));
         s.add(new CaselessLiteral("section"));
-        s.add(new Symbol('.').discard());
+        s.add(fullstop); // discards the full stop symbol
         return s;
     }
     
@@ -108,13 +116,13 @@ public class CobolParser {
     protected Parser DateWritten() {
         Sequence s = new Sequence();
         s.add(new CaselessLiteral("date-written"));
-        s.add(new Symbol('.').discard());
-        s.add(new Num());
-        s.add(new Symbol('-').discard());
-        s.add(new Word());
-        s.add(new Symbol('-').discard());
-        s.add(new Word().discard());
-        s.add(new Symbol('.').discard());
+        s.add(fullstop); // discards the full stop symbol
+        s.add(new Num()); // matches a number
+        s.add(new Symbol('-').discard()); // discards the hyphen symbol
+        s.add(new Word()); // matches a word
+        s.add(new Symbol('-').discard()); // discards the hyphen symbol
+        s.add(new Word().discard()); // discards the word
+        s.add(fullstop); // discards the full stop symbol
         s.setAssembler(new DateAssembler());
         return s;
     }
