@@ -2,8 +2,11 @@
  * PubliclyCloneable.java
  * ---------------------
  *
- * Copyright (c) 2023 Example Corporation
+ * This interface defines a contract for objects that can be cloned publicly,
+ * i.e., any object can call the clone() method on them.
  *
+ * Copyright (c) 2023 Example Corporation
+ * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -30,25 +33,12 @@ import java.util.Objects;
  *
  * @param <T> the type of the object being cloned
  * @author Example Corporation
+ *
+ * This generic interface extends the Serializable interface, indicating that
+ * objects implementing this interface can be serialized and deserialized.
+ * The clone() method is defined to return a copy of the receiving object.
  */
 public interface PubliclyCloneable<T> extends Serializable {
 
     /**
-     * A copy of the receiving object.
-     *
-     * @return a copy of the receiving object
-     * @throws CloneNotSupportedException if the object does not implement the Cloneable interface
-     */
-    default T clone() throws CloneNotSupportedException {
-        Objects.requireNonNull(this);
 
-        Class<?> clazz = this.getClass();
-        if (!Clonable.class.isAssignableFrom(clazz)) {
-            throw new CloneNotSupportedException(
-                String.format("%s does not implement Cloneable", clazz.getName()));
-        }
-
-        try {
-            return clazz.getDeclaredMethod("clone").invoke(this);
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new Cl
