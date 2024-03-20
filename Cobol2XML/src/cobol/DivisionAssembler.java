@@ -1,3 +1,7 @@
+package com.julianm.bass;
+
+import java.util.Token;
+
 /*
  * @(#)DataDivisionAssembler.java	 0.0.1
  *
@@ -18,22 +22,21 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
  */
- 
-package cobol;
 
-import parse.*;
-import parse.tokens.*;
-public class DivisionAssembler extends Assembler {
 /**
- * Pop a string, and set the target DataDivision to this
- * string.
- *
- * @param   Assembly   the assembly to work on
+ * Assembles a Data Division from a given Assembly.
  */
-public void workOn(Assembly a) {
-	Cobol c = new Cobol();
-	Token t = (Token) a.pop();
-	c.setDivisionName(t.sval().trim());
-	a.setTarget(c);
-}
+public class DataDivisionAssembler extends com.parse.Assembler {
+
+    /**
+     * Pop a string from the Assembly and set the target DataDivision to this string.
+     *
+     * @param   assembly   the assembly to work on
+     */
+    public void workOn(Assembly assembly) {
+        Cobol c = new Cobol();
+        Token t = (Token) assembly.pop();
+        c.setDivisionName(t.sval().trim());
+        assembly.setTarget(c);
+    }
 }
