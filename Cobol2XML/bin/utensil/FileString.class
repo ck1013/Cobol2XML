@@ -2,31 +2,52 @@ import java.io.*;
 import java.lang.reflect.UndeclaredThrowableException;
 
 public class FileString {
+    /**
+     * Reads the contents of a file and returns it as a string.
+     *
+     * @param fileName The name of the file to read.
+     * @return The contents of the file as a string.
+     * @throws Exception If there is an error reading the file.
+     */
     public String stringFromFileNamed(String fileName) throws Exception {
-        String result = null;
+        String result = null; // variable to store the result
+
+        // buffer to read the file contents
         char[] buf = new char[BUFLEN];
-        FileReader in = null;
-        StringWriter out = new StringWriter();
+
+        FileReader in = null; // file reader object
+        StringWriter out = new StringWriter(); // string writer object
 
         try {
+            // create a new file reader for the given file name
             in = new FileReader(fileName);
-            int len;
+
+            int len; // variable to store the number of characters read
             while ((len = in.read(buf)) >= 0) {
+                // write the read characters to the string writer
                 out.write(buf, 0, len);
             }
+
+            // get the string from the string writer
             result = out.toString();
         } finally {
-            if (in != null) {
+            if (in != null) { // if the file reader is not null
                 try {
+                    // close the file reader
                     in.close();
                 } catch (IOException e) {
+                    // throw an undeclared exception
                     throw new UndeclaredThrowableException(e);
                 }
             }
-            if (out != null) {
+
+            if (out != null) { // if the string writer is not null
+                // close the string writer
                 out.close();
             }
         }
-        return result;
+
+        return result; // return the result
     }
 }
+
