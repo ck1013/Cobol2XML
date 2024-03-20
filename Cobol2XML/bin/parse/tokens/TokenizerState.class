@@ -3,44 +3,54 @@ import java.io.PushbackReader;
 
 public class TokenizerState {
 
+    // Constructor for TokenizerState class, takes in a PushbackReader, an integer for the line number,
+    // and a Tokenizer object. Throws an IOException.
     public TokenizerState(PushbackReader reader, int line, Tokenizer tokenizer) throws IOException {
         this.nextToken(reader, line, tokenizer);
     }
 
+    // nextToken method implementation, takes in a PushbackReader, an integer for the line number,
+    // and a Tokenizer object. Throws an IOException.
     private Token nextToken(PushbackReader reader, int line, Tokenizer tokenizer) throws IOException {
         // Implementation of the nextToken method
     }
 
+    // Nested static class for Code token, extends Token class with TokenType.CODE
     public static class Code extends Token {
         public Code() {
             super(TokenType.CODE);
         }
     }
 
+    // Nested static class for LineNumberTable token, extends Token class with TokenType.LINE_NUMBER_TABLE
     public static class LineNumberTable extends Token {
         public LineNumberTable() {
             super(TokenType.LINE_NUMBER_TABLE);
         }
     }
 
+    // Nested static class for LocalVariableTable token, extends Token class with TokenType.LOCAL_VARIABLE_TABLE
     public static class LocalVariableTable extends Token {
         public LocalVariableTable() {
             super(TokenType.LOCAL_VARIABLE_TABLE);
         }
     }
 
+    // Nested static class for This token, extends Token class with TokenType.THIS
     public static class This extends Token {
         public This() {
             super(TokenType.THIS);
         }
     }
 
+    // Nested static class for Exceptions token, extends Token class with TokenType.EXCEPTIONS
     public static class Exceptions extends Token {
         public Exceptions() {
             super(TokenType.EXCEPTIONS);
         }
     }
 
+    // Nested static class for SourceFile token, extends Token class with TokenType.SOURCE_FILE
     public static class SourceFile extends Token {
         public SourceFile() {
             super(TokenType.SOURCE_FILE);
@@ -48,6 +58,7 @@ public class TokenizerState {
     }
 }
 
+// Enum class for TokenType, contains constants for each token type
 enum TokenType {
     CODE,
     LINE_NUMBER_TABLE,
@@ -57,14 +68,4 @@ enum TokenType {
     SOURCE_FILE
 }
 
-abstract class Token {
-    private final TokenType type;
-
-    Token(TokenType type) {
-        this.type = type;
-    }
-
-    public TokenType getType() {
-        return type;
-    }
-}
+// Abstract class for Token, contains a private final TokenType
