@@ -1,5 +1,5 @@
 /*
- * @(#)WordState.java	 1.0.0
+ * @(#)WordState.java	1.0.0
  *
  * Copyright (c) 1999 Steven J. Metsker
  *
@@ -16,90 +16,88 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
  */
- 
+
 package parse.tokens;
 
-import java.io.*;
-public class WordState extends TokenizerState {
+import java.io.IOException;
+import java.io.PushbackReader;
+
+/**
+ * A state for recognizing a word.
+ *
+ * @author Steven J. Metsker
+ * @version 1.0.0
+ * @since 1.0.0
+ */
+public class WordState<T> extends TokenizerState<T> {
+	
 	protected char charbuf[] = new char[16];
 	protected boolean wordChar[] = new boolean[256];
-/**
- * Constructs a word state with a default idea of what 
- * characters are admissible inside a word (as described in 
- * the class comment). 
- *
- * @return   a state for recognizing a word
- */
-public WordState() {
-	setWordChars('a', 'z', true);
-	setWordChars('A', 'Z', true);
-	setWordChars('0', '9', true);
-	setWordChars('-', '-', true);
-	setWordChars('_', '_', true);
-	setWordChars('\'', '\'', true);
-	setWordChars(0xc0, 0xff, true);
-}
-/*
- * Fatten up charbuf as necessary.
- */
-protected void checkBufLength(int i) {
-	if (i >= charbuf.length) {
-		char nb[] = new char[charbuf.length * 2];
-		System.arraycopy(charbuf, 0, nb, 0, charbuf.length);
-		charbuf = nb;
-	}
-}
-/**
- * Return a word token from a reader.
- *
- * @return a word token from a reader
- */
-public Token nextToken(PushbackReader r, int c, Tokenizer t) 
-	throws IOException {
-		
-	int i = 0;
-	do {
-		checkBufLength(i);
-		charbuf[i++] = (char) c;
-		c = r.read();
-	} while (wordChar(c));
+	protected boolean wordStartChar[] = new boolean[256];
 	
-	if (c >= 0) {
-		r.unread(c);
+	/**
+	 * Constructs a word state with a default idea of what
+	 * characters are admissible inside a word (as described in
+	 * the class comment).
+	 *
+	 * @return a state for recognizing a word
+	 */
+	public WordState() {
+		setWordChars('a', 'z', true);
+		setWordChars('A', 'Z', true);
+		setWordChars('0', '9', true);
+		setWordChars('-', '-', true);
+		setWordChars('_', '_', true);
+		setWordChars('\'', '\'', true);
+		setWordChars(0xc0, 0xff, true);
+		setWordStartChars(wordChar);
 	}
-	String sval = String.copyValueOf(charbuf, 0, i);
-	return new Token(Token.TT_WORD, sval, 0);
-}
-/**
- * Establish characters in the given range as valid 
- * characters for part of a word after the first character. 
- * Note that the tokenizer must determine which characters
- * are valid as the beginning character of a word.
- *
- * @param   from   char
- *
- * @param   to   char
- *
- * @param   boolean   true, if this state should allow
- *                    characters in the given range as part
- *                    of a word
- */
-public void setWordChars(int from, int to, boolean b) {
-	for (int i = from; i <= to; i++) {
-		if (i >= 0 && i < wordChar.length) {
-			wordChar[i] = b;
+	
+	/**
+	 * Fatten up charbuf as necessary.
+	 */
+	protected void checkBufLength(int i) {
+		if (i >= charbuf.length) {
+			char nb[] = new char[charbuf.length * 2];
+			System.arraycopy(charbuf, 0, nb, 0, charbuf.length);
+			charbuf = nb;
 		}
 	}
-}
-/*
- * Just a test of the wordChar array.
- */
-protected boolean wordChar(int c) {
-	if (c >= 0 && c < wordChar.length) {
-		return wordChar[c];
+	
+	/**
+	 * Reset the character buffer.
+	 */
+	protected void resetBuf() {
+		for (int i = 0; i < charbuf.length; i++) {
+			charbuf[i] = 0;
+		}
 	}
-	return false;
-}
-}
+	
+	/**
+	 * Get the current character buffer.
+	 *
+	 * @return the current character buffer
+	 */
+	protected char[] getCharbuf() {
+		return charbuf;
+	}
+	
+	/**
+	 * Get the current character buffer length.
+	 *
+	 * @return the current character buffer length
+	 */
+	protected int getCharbufLength() {
+		return charbuf.length;
+	}
+	
+	/**
+	 * Return a word token from a reader.
+	 *
+	 * @return a word token from a reader
+	 */
+	public Token<T> nextToken(PushbackReader r, int c, Tokenizer<T> t)
+		throws IOException {
+		
+		int i =
