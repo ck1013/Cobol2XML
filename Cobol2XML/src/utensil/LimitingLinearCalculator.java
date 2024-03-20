@@ -1,3 +1,5 @@
+import java.util.Objects;
+
 /*
  * @(#)LimitingLinearCalculator.java	 1.0.0
  *
@@ -16,54 +18,45 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
  */
- 
+
 package utensil;
+
 public class LimitingLinearCalculator extends LinearCalculator {
-/**
- * Create a LimitingLinearCalculator from known points on two scales.
- *
- * @param double xFrom
- * @param double xTo
- * @param double yFrom
- * @param double yTo
- */
-public LimitingLinearCalculator(double xFrom, double xTo, double yFrom, double yTo) {
-	super(xFrom, xTo, yFrom, yTo);
-}
-/**
- * Return the value on the first scale, corresponding to the given
- * value on the second scale. Limit the X value to be between xFrom
- * and xTo.
- *
- * @return the value on the first scale, corresponding to the given
- *         value on the second scale
- */
-public double calculateXforGivenY(double y) {
-	if (y <= yTo && y <= yFrom) {
-		return yFrom <= yTo ? xFrom : xTo;
-	}
-	if (y >= yTo && y >= yFrom) {
-		return yFrom >= yTo ? xFrom : xTo;
-	}
-	return super.calculateXforGivenY(y);
-}
-/**
- * Return the value on the second scale, corresponding to the given
- * value on the first scale. Limit the Y value to be between yFrom
- * and yTo.
- *
- * @return the value on the second scale, corresponding to the given
- *         value on the first scale
- */
-public double calculateYforGivenX(double x) {
-	if (x <= xTo && x <= xFrom) {
-		return xFrom <= xTo ? yFrom : yTo;
-	}
-	if (x >= xTo && x >= xFrom) {
-		return xFrom >= xTo ? yFrom : yTo;
-	}
-	return super.calculateYforGivenX(x);
-}
+
+    public LimitingLinearCalculator(double xFrom, double xTo, double yFrom, double yTo) {
+        super(xFrom, xTo, yFrom, yTo);
+    }
+
+    /**
+     * Return the value on the first scale, corresponding to the given
+     * value on the second scale. Limit the X value to be between xFrom
+     * and xTo.
+     *
+     * @return the value on the first scale, corresponding to the given
+     *         value on the second scale
+     */
+    public double calculateXforGivenY(double y) {
+        Objects.requireNonNull(y);
+        if (y >= yFrom && y <= yTo) {
+            return xFrom + (xTo - xFrom) * (y - yFrom) / (yTo - yFrom);
+        }
+        return y < yFrom ? xFrom : xTo;
+    }
+
+    /**
+     * Return the value on the second scale, corresponding to the given
+     * value on the first scale. Limit the Y value to be between yFrom
+     * and yTo.
+     *
+     * @return the value on the second scale, corresponding to the given
+     *         value on the first scale
+     */
+    public double calculateYforGivenX(double x) {
+        Objects.requireNonNull(x);
+        if (x >= xFrom && x <= xTo) {
+            return yFrom + (yTo - yFrom) * (x - xFrom) / (xTo - xFrom);
+        }
+        return x < xFrom ? yFrom : yTo;
+    }
 }
