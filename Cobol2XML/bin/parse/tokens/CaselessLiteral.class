@@ -1,24 +1,51 @@
+/**
+ * The CaselessLiteral class is a subclass of the Literal class and is used to represent a literal that is case-insensitive.
+ * It stores a single String value that is used for case-insensitive comparisons with token values.
+ */
 public class CaselessLiteral extends Literal {
+
+    /**
+     * The literal String value that this CaselessLiteral represents.
+     */
     private final String literal;
 
+    /**
+     * Constructs a new CaselessLiteral instance with the given literal value.
+     *
+     * @param literal The String value to be used for case-insensitive comparisons.
+     */
     public CaselessLiteral(String literal) {
+        // Call the constructor of the superclass (Literal) with the given literal value.
         super(literal);
+        // Store the given literal value in the instance variable.
         this.literal = literal;
     }
 
+    /**
+     * Determines if this CaselessLiteral qualifies the given token based on a case-insensitive comparison of the token's value.
+     *
+     * @param token The token to be checked for qualification.
+     * @return true if the token's value matches the literal value of this CaselessLiteral case-insensitively; false otherwise.
+     */
     @Override
     public boolean qualifies(Object token) {
+        // Check if the token is an instance of Token.
         if (token instanceof Token) {
+            // Get the token's value.
             String tokenValue = ((Token) token).getValue();
+            // Check if the tokenValue is non-null and matches the literal value case-insensitively.
             return tokenValue != null && tokenValue.equalsIgnoreCase(literal);
         }
+        // If the token is not an instance of Token, return false.
         return false;
     }
 
+    /**
+     * Returns a string representation of this CaselessLiteral instance.
+     *
+     * @return A string containing the literal value of this CaselessLiteral.
+     */
     @Override
     public String toString() {
         return "CaselessLiteral{" +
-                "literal='" + literal + '\'' +
-                '}';
-    }
-}
+                "literal='" + literal + '\''
