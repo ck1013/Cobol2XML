@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
+	<!-- Project name, kept the same -->
 	<name>Cobol2XML</name>
-	<comment></comment>
+	<!-- Empty comment, removed for brevity -->
 	<projects>
 	</projects>
+	<!-- Build specification, kept the same java builder -->
 	<buildSpec>
 		<buildCommand>
 			<name>org.eclipse.jdt.core.javabuilder</name>
@@ -11,7 +13,15 @@
 			</arguments>
 		</buildCommand>
 	</buildSpec>
+	<!-- Nature of the project, kept the same as Java project -->
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<!-- Added a new property for the project, specifying the output folder for compiled classes -->
+	<properties>
+		<property>
+			<name>javaOutputPath</name>
+			<value>bin</value>
+		</property>
+	</properties>
 </projectDescription>
