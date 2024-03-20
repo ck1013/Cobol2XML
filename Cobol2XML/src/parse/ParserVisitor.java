@@ -1,6 +1,10 @@
 /*
  * ParserVisitor.java
- * 
+ *
+ * This class is the base class for all parser visitors in a parser library.
+ * It provides a template method design pattern for visiting different types
+ * of parsers in a recursive descent parser.
+ *
  * Copyright (c) 1999 Steven J. Metsker
  *
  * This library is free software; you can redistribute it and/or
@@ -25,41 +29,47 @@ import java.util.ArrayList;
 public abstract class ParserVisitor {
 
     /**
-     * Visit an alternation.
+     * Visits an alternation parser. This method should be implemented by
+     * subclasses to provide specific behavior when visiting an alternation
+     * parser.
      *
-     * @param a     the parser to visit
+     * @param a     the alternation parser to visit
      * @param visited a collection of previously visited parsers
      */
     public abstract void visitAlternation(Alternation a, ArrayList<Assembly> visited);
 
     /**
-     * Visit an empty parser.
+     * Visits an empty parser. This method should be implemented by
+     * subclasses to provide specific behavior when visiting an empty parser.
      *
-     * @param e     the parser to visit
+     * @param e     the empty parser to visit
      * @param visited a collection of previously visited parsers
      */
     public abstract void visitEmpty(Empty e, ArrayList<Assembly> visited);
 
     /**
-     * Visit a repetition.
+     * Visits a repetition parser. This method should be implemented by
+     * subclasses to provide specific behavior when visiting a repetition parser.
      *
-     * @param r     the parser to visit
+     * @param r     the repetition parser to visit
      * @param visited a collection of previously visited parsers
      */
     public abstract void visitRepetition(Repetition r, ArrayList<Assembly> visited);
 
     /**
-     * Visit a sequence.
+     * Visits a sequence parser. This method should be implemented by
+     * subclasses to provide specific behavior when visiting a sequence parser.
      *
-     * @param s     the parser to visit
+     * @param s     the sequence parser to visit
      * @param visited a collection of previously visited parsers
      */
     public abstract void visitSequence(Sequence s, ArrayList<Assembly> visited);
 
     /**
-     * Visit a terminal.
+     * Visits a terminal parser. This method should be implemented by
+     * subclasses to provide specific behavior when visiting a terminal parser.
      *
-     * @param t     the parser to visit
+     * @param t     the terminal parser to visit
      * @param visited a collection of previously visited parsers
      */
     public abstract void visitTerminal(Terminal t, ArrayList<Assembly> visited);
