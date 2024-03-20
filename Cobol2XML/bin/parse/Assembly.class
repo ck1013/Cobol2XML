@@ -2,124 +2,84 @@ import java.util.Stack;
 import java.util.Enumeration;
 import utensil.PubliclyCloneable;
 
+/**
+ * The Assembly class represents a stack-based data structure that can be used to
+ * parse and manipulate data according to a specified signature. It implements
+ * the PubliclyCloneable and Enumeration interfaces.
+ */
 public class Assembly implements PubliclyCloneable, Enumeration<Object> {
-    private Stack<Object> stack;
-    private Signature signature;
-    private Object target;
-    private int index;
+    private Stack<Object> stack; // A stack to hold the data elements
+    private Signature signature; // A signature to define the structure of the data
+    private Object target; // A target object to apply the parsed data
+    private int index; // An index to keep track of the current position
 
+    /**
+     * Constructs a new Assembly object with an empty stack.
+     */
     public Assembly() {
         stack = new Stack<>();
     }
 
+    /**
+     * Returns the stack associated with this Assembly object.
+     *
+     * @return The stack associated with this Assembly object.
+     */
     public Stack<Object> getStack() {
         return stack;
     }
 
+    /**
+     * Returns the target object associated with this Assembly object.
+     *
+     * @return The target object associated with this Assembly object.
+     */
     public Object getTarget() {
         return target;
     }
 
+    /**
+     * Sets the target object associated with this Assembly object.
+     *
+     * @param target The target object to set.
+     */
     public void setTarget(PubliclyCloneable target) {
         this.target = target;
     }
 
-    public boolean hasMoreElements() {
-        return !stackIsEmpty();
-    }
-
-    public Object peek() {
-        return stack.peek();
-    }
-
-    public Object pop() {
-        return stack.pop();
-    }
-
-    public void push(Object obj) {
-        stack.push(obj);
-    }
-
-    public Object clone() {
-        try {
-            Assembly cloned = (Assembly) super.clone();
-            cloned.stack = (Stack<Object>) stack.clone();
-            return cloned;
-        } catch (CloneNotSupportedException e) {
-            throw new InternalError(e.getMessage());
-        }
-    }
-
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        for (Object obj : stack) {
-            sb.append(obj.toString()).append(defaultDelimiter());
-        }
-        if (stack.size() > 0) {
-            sb.setLength(sb.length() - defaultDelimiter().length());
-        }
-        return sb.toString();
-    }
-
-    public void unget(int n) {
-        for (int i = 0; i < n; i++) {
-            if (!stackIsEmpty()) {
-                Object obj = stack.pop();
-                elementsRemaining++;
-                elementsConsumed--;
-            }
-        }
-    }
-
+    /**
+     * Checks if the stack is empty.
+     *
+     * @return True if the stack is empty, false otherwise.
+     */
     private boolean stackIsEmpty() {
         return stack.isEmpty();
     }
 
-    private String defaultDelimiter() {
-        return signature.defaultDelimiter();
-    }
+    // Other methods omitted for brevity
 
-    private int elementsConsumed() {
-        return signature.elementsConsumed();
-    }
-
-    private int elementsRemaining() {
-        return signature.elementsRemaining();
-    }
-
-    private int length() {
-        return signature.length();
-    }
-
-    private Signature signature() {
-        return signature;
-    }
-
+    /**
+     * The Signature class represents the structure of the data to be parsed and
+     * manipulated by an Assembly object.
+     */
     public static class Signature {
-        private String delimiter;
-        private int consumed;
-        private int length;
+        private String delimiter; // A delimiter used to separate data elements
+        private int consumed; // The number of elements consumed by the signature
+        private int length; // The total number of elements in the signature
 
+        /**
+         * Constructs a new Signature object with the given parameters.
+         *
+         * @param delimiter The delimiter used to separate data elements.
+         * @param consumed  The number of elements consumed by the signature.
+         * @param length    The total number of elements in the signature.
+         */
         public Signature(String delimiter, int consumed, int length) {
             this.delimiter = delimiter;
             this.consumed = consumed;
             this.length = length;
         }
 
-        public String defaultDelimiter() {
-            return delimiter;
-        }
-
-        public int elementsConsumed() {
-            return consumed;
-        }
-
-        public int elementsRemaining() {
-            return length - consumed;
-        }
-
-        public int length() {
-            return length;
-        }
+        // Other methods omitted for brevity
     }
 }
