@@ -1,27 +1,43 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<projectDescription>
-	<!-- Project name, kept the same -->
-	<name>Cobol2XML</name>
-	<!-- Empty comment, removed for brevity -->
-	<projects>
-	</projects>
-	<!-- Build specification, kept the same java builder -->
-	<buildSpec>
-		<buildCommand>
-			<name>org.eclipse.jdt.core.javabuilder</name>
-			<arguments>
-			</arguments>
-		</buildCommand>
-	</buildSpec>
-	<!-- Nature of the project, kept the same as Java project -->
-	<natures>
-		<nature>org.eclipse.jdt.core.javanature</nature>
-	</natures>
-	<!-- Added a new property for the project, specifying the output folder for compiled classes -->
-	<properties>
-		<property>
-			<name>javaOutputPath</name>
-			<value>bin</value>
-		</property>
-	</properties>
-</projectDescription>
+<!-- This is the project description file for the Cobol2XML project.
+	It contains information about the project's build settings,
+	nature, and properties. -->
+
+<name>Cobol2XML</name>
+<!-- The 'name' tag specifies the name of the project. In this case,
+	the name of the project is Cobol2XML. -->
+
+<projects>
+	<!-- The 'projects' tag is an empty tag in this file, indicating
+	that there are no sub-projects for the Cobol2XML project. -->
+</projects>
+
+<buildSpec>
+	<!-- The 'buildSpec' tag contains build commands for the project.
+		In this case, there is only one build command for the Java builder. -->
+	<buildCommand>
+		<name>org.eclipse.jdt.core.javabuilder</name>
+		<!-- The 'name' tag specifies the name of the build command.
+			In this case, the name of the build command is the Java builder. -->
+		<arguments>
+			<!-- The 'arguments' tag contains any arguments for the build command.
+				In this case, there are no arguments for the Java builder. -->
+		</arguments>
+	</buildCommand>
+</buildSpec>
+
+<natures>
+	<!-- The 'natures' tag specifies the nature of the project.
+		In this case, the nature of the project is a Java project. -->
+	<nature>org.eclipse.jdt.core.javanature</nature>
+</natures>
+
+<properties>
+	<!-- The 'properties' tag contains any properties for the project.
+		In this case, there is one property for the output folder of the compiled classes. -->
+	<property>
+		<!-- The 'property' tag specifies a property for the project. -->
+		<name>javaOutputPath</name>
+		<!-- The 'name' tag specifies the name of the property.
+			In this case, the name of the property is javaOutputPath. -->
+		<value>bin</value>
+		<!-- The 'value' tag specifies
