@@ -52,17 +52,27 @@ public class XMLPayload {
      */
     public XMLPayload() {
         try {
+            // DocumentBuilderFactory is used to get a new instance of a DocumentBuilder
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-            dbFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, ""); // XML parsers should not be vulnerable to XXE attacks
-            dbFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, ""); // XML parsers should not be vulnerable to XXE attacks
+
+            // Prevents XXE attacks by disallowing external DTDs and schemas
+            dbFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+            dbFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
+
+            // DocumentBuilder is used to build a new XML document
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+
+            // Creates a new XML document
             doc = dBuilder.newDocument();
 
             // root element
             rootElement = doc.createElement("cobol");
+
+            // Adds the root element to the XML document
             doc.appendChild(rootElement);
 
         } catch (Exception e) {
+            // Catches any exceptions and prints the stack trace
             e.printStackTrace();
         }
     }
@@ -87,10 +97,14 @@ public class XMLPayload {
      */
     private void addElement(String elementName, String elementValue) {
         if (elementValue != null) {
+            // Creates a new Cobol element with the given name and value
             Element cobolname = doc.createElement(elementName);
             cobolname.appendChild(doc.createTextNode(elementValue));
+
+            // Adds the Cobol element to the root element
             rootElement.appendChild(cobolname);
         } else {
+            // Logs a warning if the value is null
             LOGGER.warning("Null value for element: " + elementName);
         }
     }
@@ -104,12 +118,15 @@ public class XMLPayload {
      */
     private void addDateWrittenElements(int dayDateWritten, String monthDateWritten, int yearDateWritten) {
         if (dayDateWritten != 0) {
+            // Creates a new DayDateWritten element with the given value
             addElement("day-date-written", String.valueOf(dayDateWritten));
         }
         if (monthDateWritten != null) {
+            // Creates a new MonthDateWritten element with the given value
             addElement("month-date-written", monthDateWritten);
         }
         if (yearDateWritten != 0) {
+            // Creates a new YearDateWritten element with the given value
             addElement("year-date-written", String.valueOf(yearDateWritten));
         }
     }
