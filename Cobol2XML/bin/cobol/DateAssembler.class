@@ -1,48 +1,62 @@
 import cobol.DateAssembler;
-import cobol.Cobol;
-import parse.Assembly;
-import parse.tokens.Token;
-import java.lang.Integer;
-import java.lang.String;
-import java.lang.StringBuilder;
-import java.lang.Character;
+import cobol.Cobol; // Class for interacting with COBOL data
+import parse.Assembly; // Represents an assembly of tokens
+import parse.tokens.Token; // Represents a single token
+
+import java.lang.Integer; // For integer parsing and manipulation
+import java.lang.String; // For string manipulation
+import java.lang.StringBuilder; // For string concatenation
+import java.lang.Character; // For character manipulation
 
 public class DateAssembler {
+    // The Assembly to parse
     private Assembly workOn;
+    
+    // The Cobol object to interact with
     private Cobol cobol;
-
+    
+    // Constructor for DateAssembler
     public DateAssembler(Assembly workOn, Cobol cobol) {
         this.workOn = workOn;
         this.cobol = cobol;
     }
 
+    // parse method to parse the Assembly
     public void parse() {
+        // Create new LineNumberTable and LocalVariableTable
         LineNumberTable lineNumberTable = new LineNumberTable();
         LocalVariableTable localVariableTable = new LocalVariableTable();
+
+        // Set the LineNumberTable and LocalVariableTable for the Assembly
         this.workOn.setLineNumberTable(lineNumberTable);
         this.workOn.setLocalVariableTable(localVariableTable);
 
+        // Iterate through each Token in the Assembly
         for (Token token : this.workOn.getTokens()) {
+            // Get the token string and trim any whitespace
             String tokenString = token.getSval();
             String monthString = tokenString.trim();
+
+            // Get the year string by finding the first space and taking the rest of the string
             String yearString = tokenString.substring(tokenString.indexOf(" ") + 1);
 
+            // Parse the month and year as integers
             int month = Integer.parseInt(monthString);
             double nval = Double.parseDouble(yearString);
             int year = (int) nval;
+
+            // Get the day by taking the remainder of the year as a hundredths place
             int day = (int) (nval % 100);
 
+            // Set the month, year, and day for the Cobol object
             this.cobol.setMonthDateWritten(monthString);
             this.cobol.setYearDateWritten(year);
             this.cobol.setDayDateWritten(day);
 
+            // Create a new StringBuilder to concatenate the month, year, and day
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append(month);
             stringBuilder.append(" ");
             stringBuilder.append(year);
             stringBuilder.append(" ");
-            stringBuilder.append(day);
-            token.setSval(stringBuilder.toString());
-        }
-    }
-}
+            string
