@@ -6,25 +6,45 @@ import javax.xml.transform.*;
 import javax.xml.transform.dom.*;
 import javax.xml.transform.stream.*;
 
+/** 
+ * This class generates an XML payload for a given COBOL program.
+ */
 public class XMLPayload {
     private static final Logger LOGGER = Logger.getLogger(XMLPayload.class.getName());
+    
+    // The Document object that represents the XML document
     private Document doc;
+    // The root element of the XML document
     private Element rootElement;
 
+    /**
+     * Constructs an XMLPayload object and initializes the Document and rootElement.
+     */
     public XMLPayload() {
         try {
+            // Create a new DocumentBuilderFactory
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            // Disable external DTD and schema features for security reasons
             dbFactory.setFeature(XMLConstants.ACCESS_EXTERNAL_DTD, false);
             dbFactory.setFeature(XMLConstants.ACCESS_EXTERNAL_SCHEMA, false);
+            // Create a new DocumentBuilder
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            // Create a new empty Document
             doc = dBuilder.newDocument();
+            // Create the root element with the name "Cobol"
             rootElement = doc.createElement("Cobol");
+            // Append the root element to the Document
             doc.appendChild(rootElement);
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error while creating XMLPayload", e);
         }
     }
 
+    /**
+     * Adds various elements to the XML document based on the given COBOL program.
+     *
+     * @param cobol The COBOL program to add elements for.
+     */
     public void addElements(Cobol cobol) {
         addSectionElement(cobol.getSectionName());
         addDivisionElement(cobol.getDivisionName());
@@ -34,48 +54,89 @@ public class XMLPayload {
         addYearDateWrittenElement(cobol.getYearDateWritten());
     }
 
+    /**
+     * Adds a "Section" element with the given name to the XML document.
+     *
+     * @param sectionName The name of the section.
+     */
     private void addSectionElement(String sectionName) {
         Element sectionElement = doc.createElement("Section");
         sectionElement.setAttribute("name", sectionName);
         rootElement.appendChild(sectionElement);
     }
 
+    /**
+     * Adds a "Division" element with the given name to the XML document.
+     *
+     * @param divisionName The name of the division.
+     */
     private void addDivisionElement(String divisionName) {
         Element divisionElement = doc.createElement("Division");
         divisionElement.setAttribute("name", divisionName);
         rootElement.appendChild(divisionElement);
     }
 
+    /**
+     * Adds a "Program-ID" element with the given ID to the XML document.
+     *
+     * @param programIDName The ID of the program.
+     */
     private void addProgram_IDElement(String programIDName) {
         Element program_IDElement = doc.createElement("Program-ID");
         program_IDElement.setTextContent(programIDName);
         rootElement.appendChild(program_IDElement);
     }
 
+    /**
+     * Adds a "Comment" element with the given comment to the XML document.
+     *
+     * @param comment The comment to add.
+     */
     private void addCommentLineElement(String comment) {
         Element commentElement = doc.createElement("Comment");
         commentElement.setTextContent(comment);
         rootElement.appendChild(commentElement);
     }
 
+    /**
+     * Adds a "Day-Date-Written" element with the given day to the XML document.
+     *
+     * @param day The day of the date.
+     */
     private void addDayDateWrittenElement(int day) {
         Element dayElement = doc.createElement("Day-Date-Written");
         dayElement.setTextContent(String.valueOf(day));
         rootElement.appendChild(dayElement);
     }
 
+    /**
+     * Adds a "Month-Date-Written" element with the given month to the XML document.
+     *
+     * @param month The month of the date.
+     */
     private void addMonthDateWrittenElement(int month) {
         Element monthElement = doc.createElement("Month-Date-Written");
         monthElement.setTextContent(String.valueOf(month));
         rootElement.appendChild(monthElement);
     }
 
+    /**
+     * Adds a "Year-Date-Written" element with the given year to the XML document.
+     *
+     * @param year The year of the date.
+     */
     private void addYearDateWrittenElement(int year) {
         Element yearElement = doc.createElement("Year-Date-Written");
         yearElement.setTextContent(String.valueOf(year));
         rootElement.appendChild(yearElement);
     }
 
+    /**
+     * Writes the XML document to a file with the given filename.
+     *
+     * @param filename The name of the file to write to.
+     * @throws TransformerException If there is an error while transforming the XML document.
+     */
     public void writeFile(String filename) throws TransformerException {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         transformerFactory.setProperty(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
@@ -86,14 +147,8 @@ public class XMLPayload {
         transformer.transform(source, result);
     }
 
-    public String writeToString() throws TransformerException {
-        TransformerFactory transformerFactory = TransformerFactory.newInstance();
-        transformerFactory.setProperty(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
-        Transformer transformer = transformerFactory.newTransformer();
-        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-        StringWriter stringWriter = new StringWriter();
-        StreamResult consoleResult = new StreamResult(stringWriter);
-        transformer.transform(new DOMSource(doc), consoleResult);
-        return stringWriter.getBuffer().toString();
-    }
-}
+    /**
+     * Returns the XML document as a string.
+     *
+     * @return The XML document as a string.
+     * @throws TransformerException If there is an error
