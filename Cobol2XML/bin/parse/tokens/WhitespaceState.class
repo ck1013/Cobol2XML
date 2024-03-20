@@ -1,16 +1,34 @@
 import java.io.IOException;
 import java.io.PushbackReader;
 
+/**
+ * A state for handling whitespace characters in the tokenizer.
+ */
 public class WhitespaceState implements TokenizerState {
+    /**
+     * The whitespace character(s) handled by this state.
+     */
     private final int whitespaceChar;
     private final char[] whitespaceChars;
 
+    /**
+     * Constructs a WhitespaceState for a single whitespace character.
+     *
+     * @param whitespaceChar The whitespace character.
+     */
     public WhitespaceState(int whitespaceChar) {
         this.whitespaceChar = whitespaceChar;
         this.whitespaceChars = new char[1];
         this.whitespaceChars[0] = (char) whitespaceChar;
     }
 
+    /**
+     * Constructs a WhitespaceState for a range of whitespace characters.
+     *
+     * @param from The starting character of the range.
+     * @param to   The ending character of the range.
+     * @param include If true, includes the end character in the range.
+     */
     public WhitespaceState(int from, int to, boolean include) {
         this.whitespaceChars = new char[to - from + (include ? 1 : 0)];
         for (int i = from; i <= to; i++) {
@@ -18,6 +36,17 @@ public class WhitespaceState implements TokenizerState {
         }
     }
 
+    /**
+     * Reads the next token from the input stream. If the next character is a whitespace character,
+     * returns a new token with the whitespace character's code. Otherwise, unreads the character
+     * and returns null.
+     *
+     * @param reader  The input stream.
+     * @param line    The line number of the current token.
+     * @param tokenizer The tokenizer.
+     * @return A new token with the whitespace character's code, or null if the next character is not a whitespace character.
+     * @throws IOException If there is an error reading from the input stream.
+     */
     @Override
     public Token nextToken(PushbackReader reader, int line, Tokenizer tokenizer) throws IOException {
         int c = reader.read();
@@ -29,19 +58,4 @@ public class WhitespaceState implements TokenizerState {
         if (c != -1) {
             reader.unread(c);
         }
-        return null;
-    }
-
-    @Override
-    public String toString() {
-        if (whitespaceChars.length == 1) {
-            return "WhitespaceState{" + "whitespaceChar=" + whitespaceChar + '}';
-        } else {
-            StringBuilder sb = new StringBuilder();
-            sb.append("WhitespaceState{");
-            sb.append("whitespaceChars=[");
-            for (int i = 0; i < whitespaceChars.length; i++) {
-                if (i > 0) {
-                    sb.append(", ");
-                }
-                sb.append(whitespaceChars[i]);
+       
