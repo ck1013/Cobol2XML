@@ -1,22 +1,20 @@
 /*
- * @(#)Token.java 1.0.0
+ * Token.java is a part of the parse.tokens package and represents a token
+ * in a stream of tokens.
  *
- * Copyright (c) 1999 Steven J. Metsker
+ * Copyright (c) 1999 Steven J. Metsker. This library is free software; you
+ * can redistribute it and/or modify it under the terms of the GNU Lesser
+ * General Public License as published by the Free Software Foundation;
+ * either version 2.1 of the License, or (at your option) any later version.
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser
+ * General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
  */
 
 package parse.tokens;
@@ -24,18 +22,30 @@ package parse.tokens;
 import java.util.Objects;
 
 /**
- * Represents a token in a stream of tokens.
+ * Represents a token in a stream of tokens. A token can be of different
+ * types, including number, word, symbol, and quoted string.
  */
 public class Token {
 
-    /** The type of this token. */
+    /**
+     * The type of this token. TokenType is an enumeration that indicates
+     * the type of a token.
+     */
     protected TokenType ttype;
 
-    /** The string value of this token, or null. */
+    /**
+     * The string value of this token, or null. This field is used to store
+     * the string representation of a token, such as "word" or "quoted".
+     */
     protected String sval;
 
-    /** The numeric value of this token, or 0. */
+    /**
+     * The numeric value of this token, or 0. This field is used to store
+     * the numeric representation of a token, such as 3.14.
+     */
     protected double nval;
+
+    // Constants
 
     /**
      * A constant indicating that the end of the stream has been read.
@@ -66,6 +76,8 @@ public class Token {
      * A constant indicating that a token is a quoted string, like "Launch Mi".
      */
     public static final TokenType TT_QUOTED = new TokenType("quoted");
+
+    // Constructors
 
     /**
      * Constructs a token from the given char.
@@ -118,6 +130,8 @@ public class Token {
         this.nval = nval;
     }
 
+    // Methods
+
     /**
      * Returns true if the supplied object is an equivalent token.
      *
@@ -165,9 +179,4 @@ public class Token {
         Token t = (Token) o;
 
         if (ttype != t.ttype) {
-            return false;
-        }
-        if (ttype == TT_NUMBER) {
-            return nval == t.nval;
-        }
-        if (sval == null || t.
+           
