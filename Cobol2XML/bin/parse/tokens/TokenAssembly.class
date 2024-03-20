@@ -1,14 +1,24 @@
 import java.util.Stack;
 import parse.tokens.*;
 
+/**
+ * The TokenAssembly class is used to manage the consumption and un-consumption of tokens from a Tokenizer.
+ * It maintains a buffer of consumed tokens and a stack of lengths of those tokens, allowing for easy
+ * un-consumption of the most recently consumed token.
+ */
 public class TokenAssembly {
-    private String delimiter;
-    private StringBuffer buf;
-    private Stack elementsConsumed;
-    private Tokenizer tokenizer;
-    private String remainder;
-    private int index;
+    private String delimiter; // The delimiter used to separate consumed tokens in the string representation
+    private StringBuffer buf; // A buffer to store the consumed tokens
+    private Stack elementsConsumed; // A stack to store the lengths of the consumed tokens
+    private Tokenizer tokenizer; // The Tokenizer providing the tokens
+    private String remainder; // The remainder of the current token, if any
+    private int index; // The index of the current token in the Tokenizer
 
+    /**
+     * Constructs a new TokenAssembly instance with the given delimiter and Tokenizer.
+     * @param delimiter The delimiter used to separate consumed tokens in the string representation
+     * @param tokenizer The Tokenizer providing the tokens
+     */
     public TokenAssembly(String delimiter, Tokenizer tokenizer) {
         this.delimiter = delimiter;
         this.tokenizer = tokenizer;
@@ -18,6 +28,10 @@ public class TokenAssembly {
         this.index = 0;
     }
 
+    /**
+     * Consumes the next token from the Tokenizer and appends it to the buffer.
+     * @return The first character of the consumed token
+     */
     public String consume() {
         String tokenString = tokenizer.getToken(index).toString();
         int length = tokenString.length();
@@ -28,10 +42,17 @@ public class TokenAssembly {
         return tokenString.substring(0, 1);
     }
 
+    /**
+     * Returns the current contents of the buffer.
+     * @return The current contents of the buffer
+     */
     public String consumed() {
         return buf.toString();
     }
 
+    /**
+     * Un-consumes the most recently consumed token by popping its length from the stack and adjusting the index.
+     */
     public void unconsume() {
         Integer len = (Integer) elementsConsumed.pop();
         index -= len.intValue();
@@ -39,10 +60,18 @@ public class TokenAssembly {
         buf.setLength(buf.length() - len.intValue());
     }
 
+    /**
+     * Returns true if there are more tokens in the Tokenizer, false otherwise.
+     * @return True if there are more tokens in the Tokenizer, false otherwise
+     */
     public boolean hasMoreTokens() {
         return index < tokenizer.size();
     }
 
+    /**
+     * Returns the next token from the Tokenizer or the remainder of the current token if it has not been fully consumed.
+     * @return The next token from the Tokenizer or the remainder of the current token
+     */
     public String peek() {
         if (remainder.length() > 0) {
             return remainder;
@@ -50,6 +79,10 @@ public class TokenAssembly {
         return tokenizer.getToken(index).toString();
     }
 
+    /**
+     * Returns the next element from the Tokenizer, which may be the remainder of the current token or a new token.
+     * @return The next element from the Tokenizer
+     */
     public String nextElement() {
         if (remainder.length() > 0) {
             String result = remainder;
@@ -62,19 +95,5 @@ public class TokenAssembly {
         return token.toString();
     }
 
-    public String toString() {
-        StringBuffer result = new StringBuffer();
-        result.append("[");
-        for (int i = 0; i < elementsConsumed.size(); i++) {
-            if (i > 0) {
-                result.append(delimiter);
-            }
-            Integer len = (Integer) elementsConsumed.elementAt(i);
-            for (int j = 0; j < len.intValue(); j++) {
-                result.append(buf.charAt(j));
-            }
-        }
-        result.append("]");
-        return result.toString();
-    }
-}
+    /**
+     * Returns a string representation of the consumed tokens,
