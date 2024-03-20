@@ -1,15 +1,31 @@
 import java.util.{ArrayList, Collections, Enumeration};
 import java.lang.{Object, StringBuffer};
 
+/**
+ * The Parser class is responsible for parsing a given string of code and
+ * converting it into a list of Assembly objects. It uses a top-down parsing
+ * approach to match and consume elements in the code.
+ */
 public class Parser {
     private String name;
     private Assembler assembler;
 
+    /**
+     * Constructs a new Parser object with the given name and Assembler.
+     *
+     * @param name       The name of the parser.
+     * @param assembler  The Assembler object to use for assembling the parsed code.
+     */
     public Parser(String name, Assembler assembler) {
         this.name = name;
         this.assembler = assembler;
     }
 
+    /**
+     * Parses the given code string and converts it into a list of Assembly objects.
+     *
+     * @param code The code string to parse.
+     */
     public void parse(String code) {
         ArrayList<Assembly> pv = new ArrayList<>();
         Signature(pv, code);
@@ -40,6 +56,13 @@ public class Parser {
         System.out.println(al2);
     }
 
+    /**
+     * Clones a list of Assembly objects.
+     *
+     * @param al The list of Assembly objects to clone.
+     * @param as The list of Assembly objects to clone from.
+     * @return A new list of Assembly objects that is a clone of the given list.
+     */
     private ArrayList<Assembly> elementClone(ArrayList<Assembly> al, List<Assembly> as) {
         ArrayList<Assembly> a = new ArrayList<Assembly>();
         for (Assembly b : as) {
@@ -48,6 +71,13 @@ public class Parser {
         return a;
     }
 
+    /**
+     * The Signature method is responsible for matching and consuming elements
+     * in the code string. It uses a recursive approach to handle nested elements.
+     *
+     * @param pv  The list of Assembly objects to add matched elements to.
+     * @param code The code string to parse.
+     */
     private void Signature(ArrayList<Assembly> pv, String code) {
         if (code.length() == 0)
             return;
@@ -104,10 +134,21 @@ public class Parser {
         }
     }
 
+    /**
+     * Accepts a ParserVisitor and allows it to visit each Assembly object
+     * in the given list.
+     *
+     * @param pv The ParserVisitor to accept.
+     * @param al The list of Assembly objects to visit.
+     */
     public void accept(ParserVisitor pv, ArrayList<Assembly> al) {
         pv.visit(al);
     }
 
+    /**
+     * The ParserVisitor interface defines a single visit method that is
+     * called for each Assembly object in the list.
+     */
     public interface ParserVisitor {
         void visit(Assembly a);
     }
