@@ -72,7 +72,7 @@ public class Tokenizer {
      */
     public Tokenizer(Reader reader) {
         setReader(reader);
-        setDefaultCharacterStates();
+        setDefaultCharacterStates(); // Initialize default character states
     }
 
     /**
@@ -92,12 +92,12 @@ public class Tokenizer {
      * @exception IOException if there is any problem reading
      */
     public Token nextToken() throws IOException {
-        int c = reader.read();
+        int c = reader.read(); // Read the next character
 
         if (c >= 0 && c < characterState.length) {
-            return characterState[c].nextToken(reader, c, this);
+            return characterState[c].nextToken(reader, c, this); // Dispatch to the appropriate state based on the character
         }
-        return Token.EOF;
+        return Token.EOF; // Return the end-of-file token if the character is out of range
     }
 
     /**
@@ -134,7 +134,7 @@ public class Tokenizer {
     public void setCharacterState(int from, int to, TokenizerState state) {
         for (int i = from; i <= to; i++) {
             if (i >= 0 && i < characterState.length) {
-                characterState[i] = state;
+                characterState[i] = state; // Set the character state in the lookup table
             }
         }
     }
@@ -143,50 +143,3 @@ public class Tokenizer {
      * Sets the reader to read from.
      *
      * @param reader the reader to read from
-     */
-    public void setReader(PushbackReader reader) {
-        if (reader == null) {
-            throw new NullPointerException("Reader cannot be null");
-        }
-        this.reader = reader;
-    }
-
-    /**
-     * Sets the string to read from.
-     *
-     * @param s the string to read from
-     */
-    public void setString(String s) {
-        setString(s, DEFAULT_SYMBOL_MAX);
-    }
-
-    /**
-     * Sets the string to read from.
-     *
-     * @param s the string to read from
-     *
-     * @param symbolMax the maximum length of a symbol, which
-     *                 establishes the size of pushback buffer
-     *                 we need
-     */
-    public void setString(String s, int symbolMax) {
-        setReader(new PushbackReader(new StringReader(s), symbolMax));
-    }
-
-    /**
-     * Returns the state this tokenizer uses to recognize
-     * (and ignore) comments.
-     *
-     * @return the state this tokenizer uses to recognize
-     *          (and ignore) comments
-     */
-    public SlashState slashState() {
-        return slashState;
-    }
-
-    /**
-     * Returns the state this tokenizer uses to recognize symbols.
-     *
-     * @return the state this tokenizer uses to recognize symbols
-     */
-    public SymbolState
