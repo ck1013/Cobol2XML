@@ -2,6 +2,22 @@ import java.io.IOException;
 import java.io.PushbackReader;
 import java.io.Reader;
 
+/**
+ * The `QuoteState` class is responsible for handling quotes while tokenizing input data.
+ */
 public class QuoteState implements TokenizerState {
-    private charbuf = new char[1024];
-    private int i = 
+    // A character buffer to store the characters within a quote
+    private char[] charbuf = new char[1024];
+    // An index to keep track of the current position in the character buffer
+    private int i = 0;
+
+    /**
+     * Initialize the character buffer and reset the index to 0.
+     */
+    public QuoteState() {
+        charbuf = new char[1024];
+        i = 0;
+    }
+
+    // (Rest of the class methods go here)
+}
