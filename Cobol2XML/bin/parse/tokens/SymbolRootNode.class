@@ -3,12 +3,18 @@ import java.io.PushbackReader;
 
 public class SymbolTreeNode {
 
+    // Instance variable to store the parent node
     private SymbolTreeNode parent;
+
+    // Array to store child nodes and the number of children
     private SymbolTreeNode[] children;
     private int numChildren;
+
+    // Variable to store the node value and validity
     private String value;
     private boolean isValid;
 
+    // Default constructor initializing the children array, numChildren, value, and isValid
     public SymbolTreeNode() {
         this.children = new SymbolTreeNode[26];
         this.numChildren = 0;
@@ -16,11 +22,13 @@ public class SymbolTreeNode {
         this.isValid = false;
     }
 
+    // Parameterized constructor initializing the value and calling the default constructor
     public SymbolTreeNode(String value) {
         this();
         this.value = value;
     }
 
+    // Method to add a child node with the given symbol
     public void addChild(String symbol) {
         SymbolTreeNode child = new SymbolTreeNode(symbol);
         child.setParent(this);
@@ -28,10 +36,12 @@ public class SymbolTreeNode {
         this.numChildren++;
     }
 
+    // Method to find a child node with the given character
     public SymbolTreeNode findChildWithChar(char c) {
         return children[c - 'a'];
     }
 
+    // Method to find a descendant node with the given symbol
     public SymbolTreeNode findDescendant(String symbol) {
         SymbolTreeNode current = this;
         for (char c : symbol.toCharArray()) {
@@ -43,10 +53,12 @@ public class SymbolTreeNode {
         return current;
     }
 
+    // Method to set the validity of the node
     public void setValid(boolean isValid) {
         this.isValid = isValid;
     }
 
+    // Method to get the ancestry of the node as a string
     public String getAncestry() {
         StringBuilder ancestry = new StringBuilder();
         SymbolTreeNode current = this;
@@ -57,12 +69,14 @@ public class SymbolTreeNode {
         return ancestry.toString();
     }
 
+    // Method to read the next symbol from the input stream
     public String nextSymbol(PushbackReader reader, int maxCharsToRead) throws IOException {
         SymbolTreeNode deepestRead = deepestRead(reader);
         unreadToValid(reader, deepestRead);
         return findChildWithChar(reader.readChar()).getValue();
     }
 
+    // Helper method to find the deepest read node from the input stream
     private SymbolTreeNode deepestRead(PushbackReader reader) throws IOException {
         SymbolTreeNode current = this;
         while (current.getNumChildren() > 0 && reader.getBufferLength() > 0) {
@@ -73,6 +87,7 @@ public class SymbolTreeNode {
         return current;
     }
 
+    // Helper method to unread characters back to the valid node
     private void unreadToValid(PushbackReader reader, SymbolTreeNode node) throws IOException {
         while (node != this && node.getValue().length() > 0) {
             reader.unread(node.getValue().charAt(0));
@@ -80,5 +95,14 @@ public class SymbolTreeNode {
         }
     }
 
+    // Method to get the parent node
     public SymbolTreeNode getParent() {
         return parent;
+    }
+
+    // Method to set the parent node
+    public void setParent(SymbolTreeNode parent) {
+        this.parent = parent;
+    }
+
+}
