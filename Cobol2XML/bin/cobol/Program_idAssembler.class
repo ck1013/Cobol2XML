@@ -1,38 +1,53 @@
-import cobol.Cobol;
-import cobol.Program_idAssembler;
-import parse.Assembly;
-import parse.tokens.Token;
-import utensil.PubliclyCloneable;
+import cobol.Cobol; // Import the Cobol class
+import cobol.Program_idAssembler; // Import the Program_idAssembler class
+import parse.Assembly; // Import the Assembly class
+import parse.tokens.Token; // Import the Token class
+import utensil.PubliclyCloneable; // Import the PubliclyCloneable interface
 
+/** 
+ * The ProgramIDAssembler class is used to set the program ID for a Cobol object in an Assembly object.
+ */
 public class ProgramIDAssembler implements PubliclyCloneable<ProgramIDAssembler> {
-    private Assembly workOn;
+    private Assembly workOn; // The Assembly object being worked on
 
+    /**
+     * Constructs a ProgramIDAssembler object with the given Assembly object.
+     *
+     * @param workOn The Assembly object being worked on
+     */
     public ProgramIDAssembler(Assembly workOn) {
         this.workOn = workOn;
     }
 
+    /**
+     * Sets the program ID for the Cobol object at the top of the Assembly object.
+     *
+     * @param sval The program ID as a string
+     */
     public void setProgram_ID(String sval) {
-        sval = sval.trim();
-        Cobol cobol = (Cobol) workOn.pop();
-        cobol.setTarget(sval);
+        sval = sval.trim(); // Trim any whitespace from the program ID
+        Cobol cobol = (Cobol) workOn.pop(); // Get the Cobol object from the Assembly object
+        cobol.setTarget(sval); // Set the program ID for the Cobol object
     }
 
+    /**
+     * Creates a clone of this ProgramIDAssembler object.
+     *
+     * @return A clone of this ProgramIDAssembler object
+     */
     @Override
     public ProgramIDAssembler clone() {
         return new ProgramIDAssembler(workOn.clone());
     }
 
+    /**
+     * The main method demonstrates how to use the ProgramIDAssembler class.
+     *
+     * @param args Command line arguments (not used)
+     */
     public static void main(String[] args) {
         // Initialize Assembly object
         Assembly assembly = new Assembly();
 
         // Create ProgramIDAssembler object
-        ProgramIDAssembler assembler = new ProgramIDAssembler(assembly);
-
-        // Set program ID
-        assembler.setProgram_ID("My Program");
-
-        // Print the target of the Cobol object
-        System.out.println(assembly.peek().getTarget());
-    }
-}
+       
