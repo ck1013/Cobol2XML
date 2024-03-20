@@ -4,105 +4,101 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Random;
 
-public class Repetition extends Parser {
-    private String name;
-    private Parser subparser;
-    private int EXPWIDTH = 4;
+public class Repetition extends Parser { // Repetition class extends Parser class
+    private String name; // name variable to store the name of the repetition
+    private Parser subparser; // subparser variable to store the subparser
+    private int EXPWIDTH = 4; // EXPWIDTH variable with a default value of 4
 
+    // constructor for Repetition class
     public Repetition(Parser subparser, String name) {
-        this.subparser = subparser;
-        this.name = name;
+        this.subparser = subparser; // initialize subparser
+        this.name = name; // initialize name
     }
 
+    // override accept method from Parser class
     @Override
     public void accept(ParserVisitor pv, List<Assembly> visited) {
-        pv.visitRepetition(this, visited);
+        pv.visitRepetition(this, visited); // visit the repetition node
     }
 
+    // override getSignature method from Parser class
     @Override
     public Signature getSignature() {
         return new Signature() {
             @Override
             public void accept(ParserVisitor pv, List<Assembly> visited) {
-                pv.visitRepetitionSignature(Repetition.this, visited);
+                pv.visitRepetitionSignature(Repetition.this, visited); // visit the repetition signature node
             }
         };
     }
 
+    // getter for subparser
     public Parser getSubparser() {
         return subparser;
     }
 
+    // match method to match the input list of assemblies
     public List<Assembly> match(List<Assembly> in) {
-        List<Assembly> out = new ArrayList<>();
-        Enumeration<Assembly> e = Collections.enumeration(in);
-        while (e.hasMoreElements()) {
-            Assembly a = e.nextElement();
-            if (a.match(subparser)) {
-                out.add(a);
+        List<Assembly> out = new ArrayList<>(); // create an empty list to store the output
+        Enumeration<Assembly> e = Collections.enumeration(in); // create an enumeration from the input list
+        while (e.hasMoreElements()) { // iterate over the enumeration
+            Assembly a = e.nextElement(); // get the next assembly
+            if (a.match(subparser)) { // if the assembly matches the subparser
+                out.add(a); // add the assembly to the output list
             }
         }
-        return out;
+        return out; // return the output list
     }
 
+    // matchAndAssemble method to match and assemble the input list of assemblies
     public List<Assembly> matchAndAssemble(List<Assembly> in) {
-        List<Assembly> out = new ArrayList<>();
-        for (Assembly a : in) {
-            if (a.match(subparser)) {
-                out.add(a);
-                a.assemble(workOn);
+        List<Assembly> out = new ArrayList<>(); // create an empty list to store the output
+        for (Assembly a : in) { // iterate over the input list
+            if (a.match(subparser)) { // if the assembly matches the subparser
+                out.add(a); // add the assembly to the output list
+                a.assemble(workOn); // assemble the assembly
             }
         }
-        return out;
+        return out; // return the output list
     }
 
+    // static method to generate a random list of assemblies
     public static List<Assembly> randomExpansion(int min, int max) {
-        Random random = new Random();
-        int num = random.nextInt(max - min + 1) + min;
-        List<Assembly> assemblies = new ArrayList<>();
-        for (int i = 0; i < num; i++) {
-            assemblies.add(new Assembly(""));
+        Random random = new Random(); // create a new random object
+        int num = random.nextInt(max - min + 1) + min; // generate a random number between min and max
+        List<Assembly> assemblies = new ArrayList<>(); // create an empty list to store the assemblies
+        for (int i = 0; i < num; i++) { // iterate over the range of the random number
+            assemblies.add(new Assembly("")); // add a new assembly with an empty string to the list
         }
-        return assemblies;
+        return assemblies; // return the list of assemblies
     }
 
+    // getUnvisitedString method to generate a string representation of the unvisited subparser
     public String getUnvisitedString() {
         return getUnvisitedString(subparser);
     }
 
+    // helper method to generate a string representation of the unvisited subparser
     private String getUnvisitedString(Parser p) {
-        if (p instanceof Repetition) {
-            Repetition r = (Repetition) p;
-            return "{" + getUnvisitedString(r.getSubparser()) + "}" + r.name;
-        } else if (p instanceof Sequence) {
-            Sequence s = (Sequence) p;
-            StringBuilder sb = new StringBuilder();
-            for (Parser parser : s.getParsers()) {
-                sb.append(getUnvisitedString(parser));
+        if (p instanceof Repetition) { // if the subparser is a repetition
+            Repetition r = (Repetition) p; // cast the subparser to Repetition
+            return "{" + getUnvisitedString(r.getSubparser()) + "}" + r.name; // generate a string representation
+        } else if (p instanceof Sequence) { // if the subparser is a sequence
+            Sequence s = (Sequence) p; // cast the subparser to Sequence
+            StringBuilder sb = new StringBuilder(); // create a string builder
+            for (Parser parser : s.getParsers()) { // iterate over the parsers in the sequence
+                sb.append(getUnvisitedString(parser)); // generate a string representation of each parser
             }
-            return sb.toString();
-        } else if (p instanceof Choice) {
-            Choice c = (Choice) p;
-            StringBuilder sb = new StringBuilder();
-            for (Parser parser : c.getParsers()) {
-                sb.append(getUnvisitedString(parser));
+            return sb.toString(); // return the string representation of the sequence
+        } else if (p instanceof Choice) { // if the subparser is a choice
+            Choice c = (Choice) p; // cast the subparser to Choice
+            StringBuilder sb = new StringBuilder(); // create a string builder
+            for (Parser parser : c.getParsers()) { // iterate over the parsers in the choice
+                sb.append(getUnvisitedString(parser)); // generate a string representation of each parser
             }
-            return "(" + sb.toString() + ")";
-        } else if (p instanceof Token) {
-            Token t = (Token) p;
-            return t.getText();
-        } else if (p instanceof ConstantValue) {
-            ConstantValue cv = (ConstantValue) p;
-            return cv.getValue();
-        } else if (p instanceof Optional) {
-            Optional o = (Optional) p;
-            return "[" + getUnvisitedString(o.getParser()) + "]";
-        } else {
-            return "";
-        }
-    }
-
-    public void setPreAssembler(Assembler assembler) {
-        subparser.setPreAssembler(assembler);
-    }
-}
+            return "(" + sb.toString() + ")"; // return the string representation of the choice
+        } else if (p instanceof Token) { // if the subparser is a token
+            Token t = (Token) p; // cast the subparser to Token
+            return t.getText(); // generate a string representation of the token
+        } else if (p instanceof ConstantValue) { // if the subparser is a constant value
+            ConstantValue cv = (ConstantValue) p; // cast the
